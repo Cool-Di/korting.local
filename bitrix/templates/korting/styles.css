@@ -1,0 +1,60 @@
+span.btn_grey_blue {height:22px;margin:0 15px 0 0;padding:0 0 0 10px;background: url('/media/images/btn-grey-blue.png') 0 0; display: inline-block;}
+span.btn_grey_blue input {border:none;height:22px;padding:0 10px 0 0;font-size:13px;line-height: 22px;color:#fff;font-weight: bold;text-decoration: none;background: #fff url('/media/images/btn-grey-blue.png') 100% 0;display: inline-block;}
+span.btn_grey_blue input:hover {text-decoration: underline;}
+
+span.btn_grey_blue:hover {background: url('/media/images/btn-grey-blue.png') 0 -24px;}
+span.btn_grey_blue:hover input {background: #fff url('/media/images/btn-grey-blue.png') 100% -24px;}
+
+
+
+.bxedmain-cont ul {list-style: none;}
+.bxedmain-cont  ul li {padding:0 0 15px 15px;font-size:12px;background: url('/media/images/item-arrow.png') 0 5px no-repeat;}
+.bxedmain-cont  div.article ul li a:hover {text-decoration: underline;}
+.bxedmain-cont  div.article ul li span.count {color:#a0a0a0;}
+
+
+div.register_form table td table td.title {white-space: nowrap;line-height: 25px;}
+
+div.register_form div.register_form_header {
+	margin:-90px 0 0 0;
+	height:20px; 
+	background: url('/media/images/login-form-bg-header.png') no-repeat 0 0;
+}
+div.register_form div.register_form_footer {
+	height:55px; 
+	background: url('/media/images/login-form-bg-footer.png') no-repeat 0 0;
+}
+
+div.register_form div.register{
+	background: url('/media/images/login-form-bg-body.png') repeat-y 0 0;
+    padding-left: 18px;
+    padding-top: 29px;
+}
+
+div.register_form div.checkbox input{
+	border: none !important;
+	background: none !important;
+}
+div.register_form div.checkbox{
+	font-size: 11px !important;
+	margin-top: -12px;
+}
+div.register_form div.field{
+	width: 185px !important;
+}
+
+div.register_form div.inner_wrap table tr td.left{
+	vertical-align: middle;
+	text-align: center;
+	border-right: 1px solid;
+}
+div.register_form div.inner_wrap table{
+	height: 100%;
+}
+div.register_form div.inner_wrap table tr td.right{
+	padding-left: 24px;
+	padding-right: 20px;
+	/*border-left: 1px solid #C1CAC9;*/
+	padding-top: 13px;
+	padding-bottom: 13px;
+}

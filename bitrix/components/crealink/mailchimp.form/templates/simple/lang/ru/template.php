@@ -1,0 +1,3 @@
+<?
+$MESS["CREALINK_MAILCHIMP_PODPISATQSA"] = "Подписаться";
+?>

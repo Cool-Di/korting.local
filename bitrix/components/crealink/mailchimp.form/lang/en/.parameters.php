@@ -1,0 +1,10 @@
+<?
+$MESS["CREALINK_MAILCHIMP_KLUC"] = "key";
+$MESS["CREALINK_MAILCHIMP_PROVERATQ_STATUS_POD"] = "Check the status of subscriptions to authorized users";
+$MESS["CREALINK_MAILCHIMP_SPISOK"] = "List";
+$MESS["CREALINK_MAILCHIMP_RASSYLKI"] = "Mailings";
+$MESS["CREALINK_MAILCHIMP_PREDLAGATQ_RASSYLKI"] = "Offer mailings";
+$MESS["CREALINK_MAILCHIMP_RASSYLKA"] = "Mailing ";
+$MESS["CREALINK_MAILCHIMP_GRUPPY_V"] = "Group in";
+$MESS["CREALINK_MAILCHIMP_VYSLATQ_PISQMO_DLA_P"] = "Send a mail for confirmation";
+?>

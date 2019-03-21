@@ -1,13 +1,12 @@
 # common bx
 /upload/
-/bitrix/
-#/bitrix/*
-#!/bitrix/components/
-#/bitrix/components/*/*
-#!/bitrix/php_interface/
-#/bitrix/php_interface/dbconn.php
-#/bitrix/php_interface/dbconn_local.php
-#!/bitrix/templates
+/bitrix/*
+!/bitrix/components/
+/bitrix/components/bitrix/*
+!/bitrix/php_interface/
+/bitrix/php_interface/dbconn.php
+/bitrix/php_interface/dbconn_local.php
+!/bitrix/templates
 
 # Порочные файлы от OS
 *~
