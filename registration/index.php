@@ -1,5 +1,5 @@
 <?
-require($_SERVER["DOCUMENT_ROOT"]."/bitrix/templates/korting/header2.php");
+require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/templates/korting/header2.php");
 $APPLICATION->SetTitle("Регистрация");
 ?>
 
@@ -26,4 +26,4 @@ $APPLICATION->SetTitle("Регистрация");
 false
 );?>
 <?endif;?>
-<? require($_SERVER["DOCUMENT_ROOT"]."/bitrix/templates/korting/footer2.php");?>
+<? require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/templates/korting/footer2.php");?>
