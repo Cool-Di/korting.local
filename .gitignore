@@ -1,7 +1,6 @@
 # common bx
 /upload/
 /bitrix/
-/bitrix/templates/.default/description.php
 
 # Порочные файлы от OS
 *~
