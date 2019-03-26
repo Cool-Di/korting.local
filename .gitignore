@@ -1,8 +1,7 @@
 # common bx
 /upload/
-/bitrix/*
-/bitrix/php_interface/dbconn.php
-/bitrix/php_interface/dbconn_local.php
+/bitrix/
+/bitrix/templates/.default/description.php
 
 # Порочные файлы от OS
 *~
