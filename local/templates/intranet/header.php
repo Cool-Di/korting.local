@@ -22,6 +22,11 @@ if($_REQUEST['testtest'])
     
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://code.jquery.com/jquery.js"></script>
+
+    <!-- jQuery-ui -->
+    <script src="/assets/js/vendor/jquery-ui-1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="/assets/js/vendor/jquery-ui-1.12.1/jquery-ui.min.css" type="text/css" media="screen" />
+
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="/intranet/media/bootsrtap/js/bootstrap.min.js"></script>
     
