@@ -20,9 +20,9 @@ $(document).ready(function() {
 			if($('form.report_form table.product_list tr').size() < 2)
 				$('form.report_form table.product_list').hide();
 				
-			$('form.report_form button.add_product').click(function(){
+			/*$('form.report_form button.add_product').click(function(){
 				ReportForm.AddProduct($(this));
-			});
+			});*/
 			
 			$(document).on('change', 'form.report_form table.product_list input[name="FIELDS[PRODUCT_PRICE][]"], form.report_form table.product_list input[name="FIELDS[PRODUCT_COUNT][]"]', function(){
 				
@@ -41,9 +41,9 @@ $(document).ready(function() {
 			});
 			
 			
-			$('form.report_form button.add_model').click(function(){
+			/*$('form.report_form button.add_model').click(function(){
 				ReportForm.AddProduct($(this));
-			});
+			});*/
 			
 			$('select.product_section').change(function(){
 				$.fancybox.showLoading();
@@ -103,8 +103,9 @@ $(document).ready(function() {
 
 			$('form.report_form table.product_list td.result_price').html(totla_price);
 			$('form.report_form table.product_list td.result_count').html(totla_count);
-		},
-		AddProduct: function(button)
+		}
+		//AddProduct заменён на функцию select в autocomplite
+		/*AddProduct: function(button)
 		{
 			var p_template 	= this.p_template;
 			
@@ -134,7 +135,7 @@ $(document).ready(function() {
 			
 			if($('form.report_form table.product_list').is(':hidden'))
 				$('form.report_form table.product_list').slideDown('slow');
-		}
+		}*/
 	}
 
 	ReportForm.Init();

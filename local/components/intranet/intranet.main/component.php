@@ -969,6 +969,11 @@ if($access_level < 100)
 		{
 			$arFields 							= $ob->GetFields();
 			$products[$arFields['ID']]			= $arFields;
+            $arResult['JSON_PRODUCTS'][] = [
+                "value" => $arFields['ID'],
+                "label" => trim($arFields["NAME"]), //trim на всякий случай
+                "article" => $arFields["PROPERTY_ARTICLE_VALUE"]
+            ];
 			$sections_ids[$arFields['IBLOCK_SECTION_ID']]['products'][]	= $arFields;
 		}
 		

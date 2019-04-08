@@ -1,5 +1,8 @@
 <? if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true) die();  ?>
 <? error_reporting(E_ALL ^ E_NOTICE);
+
+$this->addExternalJS("/local/components/intranet/intranet.main/templates/.default/report_form.js");
+
 function add_offer_show_select($sections, $active_section = '',  $level = '')
 {
 	foreach($sections as $section)
@@ -24,9 +27,10 @@ function add_offer_show_select($sections, $active_section = '',  $level = '')
 	
 	return $result;
 }
-
-//dump($arResult);
 ?>
+<script>
+    jsonProducts = <?=json_encode($arResult["JSON_PRODUCTS"]);?>;
+</script>
 
 <? if(sizeof($arResult['ERRORS']) > 0) { ?>
 	<div class="errors">
@@ -138,7 +142,7 @@ for($i = date('W'); $i >= 1; $i--) { ?>
 		</div>
 	</div>
 	
-	
+	<?/*
 	<div class="form-group">
 		<label for="inputEmail3" class="col-sm-3 control-label">Продукт</label>
 		<div class="col-sm-5">
@@ -168,6 +172,15 @@ for($i = date('W'); $i >= 1; $i--) { ?>
 			<button type="button" class="btn btn-success add_product">Добавить</button>
 		</div>
 	</div>
+*/?>
+
+    <div class="form-group">
+        <label for="inputEmail3" class="col-sm-3 control-label">Модель</label>
+        <div class="col-sm-5">
+            <input type="text" class="form-control" id="modelAutocomplite" placeholder="Модель">
+        </div>
+    </div>
+
 	
 	<? /*
 	<div class="form-group">

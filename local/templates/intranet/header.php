@@ -1,8 +1,10 @@
 <?if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true)die();
 IncludeTemplateLangFile(__FILE__);
 
-if($_REQUEST['testtest'])
-	CUser::Authorize(198);
+/*if($_REQUEST['testtest'])
+	CUser::Authorize(198);*/
+
+$obAsset = \Bitrix\Main\Page\Asset::getInstance();
 ?>
 <!DOCTYPE html>
 <html>
@@ -10,6 +12,16 @@ if($_REQUEST['testtest'])
 	<?$APPLICATION->ShowHead();?>
 	<title><?$APPLICATION->ShowTitle()?></title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <?php
+    $obAsset->addJs('https://code.jquery.com/jquery.js');
+    $obAsset->addJs('/assets/js/vendor/jquery-ui-1.12.1/jquery-ui.min.js');
+    $obAsset->addJs('/intranet/media/bootsrtap/js/bootstrap.min.js'); //Include all compiled plugins (below), or include individual files as needed
+
+    $obAsset->addJs('/intranet/media/fancyapps/source/jquery.fancybox.pack.js?v=2.1.5'); //Add fancyBox
+
+    $obAsset->addJs('/intranet/media/js/scripts.js');
+    ?>
     <!-- Bootstrap -->
     <link href="/intranet/media/bootsrtap/css/bootstrap.min.css" rel="stylesheet">
 
@@ -19,22 +31,13 @@ if($_REQUEST['testtest'])
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
-    
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://code.jquery.com/jquery.js"></script>
 
     <!-- jQuery-ui -->
-    <script src="/assets/js/vendor/jquery-ui-1.12.1/jquery-ui.min.js"></script>
     <link rel="stylesheet" href="/assets/js/vendor/jquery-ui-1.12.1/jquery-ui.min.css" type="text/css" media="screen" />
 
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="/intranet/media/bootsrtap/js/bootstrap.min.js"></script>
-    
     <!-- Add fancyBox -->
 	<link rel="stylesheet" href="/intranet/media/fancyapps/source/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
-	<script type="text/javascript" src="/intranet/media/fancyapps/source/jquery.fancybox.pack.js?v=2.1.5"></script>
-	
-    <script src="/intranet/media/js/scripts.js"></script>
+
 </head>
 
 <body style="">

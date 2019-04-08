@@ -1143,3 +1143,9 @@ table.reports_table input[type="checkbox"] {width: 34px;height: 34px;}
 
 form.reports_form div.form-group label {display: block;}
 form.plan_filter div.form-group label {display: block;}
+
+.ui-autocomplete {
+	max-height: 200px;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
