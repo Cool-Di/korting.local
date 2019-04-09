@@ -2,7 +2,7 @@
 <?
 
 ?>
-<h3>Список отчетов</h3>
+<h3>Список продаж</h3>
 
 <table class="table table-striped reports_table">
 <thead>

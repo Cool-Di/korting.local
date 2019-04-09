@@ -2,7 +2,7 @@
 <?
 
 ?>
-<h3>Просмотр отчета</h3>
+<h3>Просмотр продажи</h3>
 <br/>
 <? if(sizeof($arResult['ERRORS']) > 0) { ?>
 	<div class="errors">

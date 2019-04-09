@@ -1,6 +1,6 @@
 <? if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true) die();  ?>
 <?//=date('n', strtotime(date('Y').'W'.'40'));?>
-<h3>Список отчетов</h3>
+<h3>Список продаж</h3>
 <br/>
 <form class="form-inline reports_form" role="form">
 	<div class="form-group">
@@ -134,7 +134,7 @@
 	<tr>
 		<td colspan="6">
 			<input type="hidden" name="action" value="adopted_all_report" />
-			<button  class="btn btn-default btn-success "><span class="glyphicon glyphicon-ok"></span> Принять отмеченные отчеты</button>
+			<button  class="btn btn-default btn-success "><span class="glyphicon glyphicon-ok"></span> Принять отмеченные продажи</button>
 		</td>
 		<td colspan="2">
 			<a href="#" class="btn btn-default btn-warning checked_all_report btn-sm"><span class="glyphicon glyphicon-ok"></span> Отметить все</a>

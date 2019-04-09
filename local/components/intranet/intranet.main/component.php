@@ -96,12 +96,12 @@ class IntranetComp
 					$this->templatePage	= 'report_send_success';
 				break;
 				case 'add_report':
-					$APPLICATION->AddChainItem("Добавить отчет", "/intranet/?action=add_report");
+					$APPLICATION->AddChainItem("Добавить продажу", "/intranet/?action=add_report");
 					$component->arResult	= $this->ReportForm();
 					$this->templatePage	= 'report_form';
 				break;
 				case 'reports': 
-					$APPLICATION->AddChainItem("Отчеты", "/intranet/reports/");
+					$APPLICATION->AddChainItem("Продажи", "/intranet/reports/");
 					$component->arResult	= $this->ReportsPage();
 					$this->templatePage	= 'reports';
 				break;
@@ -111,14 +111,14 @@ class IntranetComp
 					$this->templatePage	= 'reports_by_month';
 				break;
 				case 'report_detail':
-					$APPLICATION->AddChainItem("Отчеты", "/intranet/reports/");
-					$APPLICATION->AddChainItem("Просмотр отчета");
+					$APPLICATION->AddChainItem("Продажи", "/intranet/reports/");
+					$APPLICATION->AddChainItem("Просмотр продажи");
 					$component->arResult	= $this->ReportDetailPage();
 					$this->templatePage	= 'report_detail';
 				break;
 				case 'report_detail_user':
-					$APPLICATION->AddChainItem("Отчеты", "/intranet/reports/");
-					$APPLICATION->AddChainItem("Просмотр отчета");
+					$APPLICATION->AddChainItem("Продажи", "/intranet/reports/");
+					$APPLICATION->AddChainItem("Просмотр продажи");
 					$component->arResult	= $this->ReportDetailUserPage();
 					$this->templatePage	= 'report_detail_user';
 				break;
@@ -168,7 +168,7 @@ class IntranetComp
 			$report_id	= intval($_REQUEST['report_id']);
 		else
 		{
-			$arResult['ERRORS'][] = 'Не задан ID отчета';
+			$arResult['ERRORS'][] = 'Не задан ID продажи';
 			return $arResult;
 		}	
 
@@ -437,7 +437,7 @@ class IntranetComp
 			$report_id	= intval($_REQUEST['report_id']);
 		else
 		{
-			$arResult['ERRORS'][] = 'Не задан ID отчета';
+			$arResult['ERRORS'][] = 'Не задан ID продажи';
 			return $arResult;
 		}	
 		
@@ -465,7 +465,7 @@ class IntranetComp
 		}
 		else
 		{
-			$arResult['ERRORS'][] = 'Отчет с заданным ID не найден';
+			$arResult['ERRORS'][] = 'Продажа с заданным ID не найдена';
 		}
 
 		$arResult['REPORT']		= $report_ar;
@@ -494,7 +494,7 @@ class IntranetComp
 		
 		if(!isset($_REQUEST['FIELDS']['REPORT_ID']) || !is_array($_REQUEST['FIELDS']['REPORT_ID']) || sizeof($_REQUEST['FIELDS']['REPORT_ID']) <= 0)
 		{
-			$arResult['ERRORS'][] = 'Не выбрано ни одного отчета';
+			$arResult['ERRORS'][] = 'Не выбрано ни одного продажи';
 			return $arResult;
 		}
 		else
@@ -556,7 +556,7 @@ if($access_level < 100)
 			$report_id	= intval($_REQUEST['report_id']);
 		else
 		{
-			$arResult['ERRORS'][] = 'Не задан ID отчета';
+			$arResult['ERRORS'][] = 'Не задан ID продажи';
 			return $arResult;
 		}
 		
@@ -580,7 +580,7 @@ if($access_level < 100)
 		}
 		else
 		{
-			$arResult['ERRORS'][] = 'Отчет с заданным ID не найден';
+			$arResult['ERRORS'][] = 'Продажа с заданным ID не найдена';
 		}
 
 		$arResult['REPORT']		= $report_ar;
@@ -626,7 +626,7 @@ if($access_level < 100)
 			$report_id	= intval($_REQUEST['report_id']);
 		else
 		{
-			$arResult['ERRORS'][] = 'Не задан ID отчета';
+			$arResult['ERRORS'][] = 'Не задан ID продажи';
 			return $arResult;
 		}
 		
@@ -650,7 +650,7 @@ if($access_level < 100)
 		}
 		else
 		{
-			$arResult['ERRORS'][] = 'Отчет с заданным ID не найден';
+			$arResult['ERRORS'][] = 'Продажа с заданным ID не найдена';
 		}
 
 		$arResult['REPORT']		= $report_ar;
@@ -1010,7 +1010,7 @@ if($access_level < 100)
 
 				if($arFields['PROPERTIES']['ADOPTED']['VALUE'] == 'Да')
 				{
-					$arResult['ERRORS'][] = 'Отчет уже принят, редактирование запрещено';
+					$arResult['ERRORS'][] = 'Продажа уже принята, редактирование запрещено';
 				}
 				else
 				{					
@@ -1027,7 +1027,7 @@ if($access_level < 100)
 			}
 			else
 			{
-				$arResult['ERRORS'][] = 'Отчет с заданным ID не найден';
+				$arResult['ERRORS'][] = 'Продажа с заданным ID не найдена';
 			}
 		}
 		
@@ -1068,7 +1068,7 @@ if($access_level < 100)
 				{
 					$arFields 				= $ob->GetFields();
 					//$arFields['PROPERTIES']	= $ob->GetProperties();
-					$arResult['ERRORS'][]	= 'Отчет за указанную дату уже добавлялся';
+					$arResult['ERRORS'][]	= 'Продажа за указанную дату уже добавлялась';
 				}
 				//---
 			}
