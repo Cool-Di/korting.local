@@ -1,33 +1,40 @@
 <?
 $aMenuLinks = Array(
-	Array(
+	/*Array(
 		"Обучение", 
 		"/course/", 
 		Array(), 
 		Array("class"=>"study"), 
 		"" 
-	),
-	Array(
+	),*/
+	/*Array(
 		"Материалы", 
 		"/materials/", 
 		Array(), 
 		Array("class"=>"materials"),  
 		"" 
-	),
-	Array(
+	),*/
+    Array(
+        "Бонусная программа",
+        "/intranet/",
+        Array(),
+        Array("class"=>"materials"),
+        ""
+    ),
+	/*Array(
 		"Вебинары", 
 		"/webinars/", 
 		Array(), 
 		Array("class"=>"webinars"), 
 		"" 
-	),
-	Array(
+	),*/
+	/*Array(
 		"Конкурсы", 
 		"/tenders/", 
 		Array(), 
 		Array("class"=>"tenders"), 
 		"" 
-	),
+	),*/
 	Array(
 		"Контакты", 
 		"/contacts/", 

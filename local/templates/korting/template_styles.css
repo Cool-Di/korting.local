@@ -292,7 +292,7 @@ span.btn_grey_test input:hover {text-decoration: underline;}
     height: 100%;
 	padding:0px 10px 0;
 	display: block;
-	width: 16%;
+	/*width: 16%;*/
     list-style: none outside none;
 }	
 #header div.bottom ul.top_menu li span.all{

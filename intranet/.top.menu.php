@@ -8,14 +8,14 @@ $aMenuLinks = Array(
 		"CSite::InGroup(array(8))" 
 	),
 	Array(
-		"Добавить отчет", 
+		"Добавить продажу",
 		"/intranet/?action=add_report", 
 		Array(), 
 		Array(), 
 		"CSite::InGroup(array(8))" 
 	),
 	Array(
-		"Отчеты", 
+		"Продажи",
 		"/intranet/reports/", 
 		Array(), 
 		Array(), 

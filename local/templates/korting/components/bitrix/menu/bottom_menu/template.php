@@ -15,6 +15,6 @@ foreach($arResult as $arItem):
 	<?endif?>
 	
 <?endforeach?>
-	<li><a href="/intranet/">Интранет</a></li>
+	<?/*<li><a href="/intranet/">Интранет</a></li>*/?>
 </ul>
 <?endif?>
