@@ -10,6 +10,7 @@ class Intranet
 	public $REPORT_IBLOCK_ID	= 24;
 	public $SALE_PLAN_IBLOCK_ID	= 25;
 	public $COMMENT_IBLOCK_ID	= 26;
+    public $PERIOD_IBLOCK_ID	= 27;
 	
 	private $USER_GROUP_ACCESS_LEVEL	= array(
 											1 => 100, 

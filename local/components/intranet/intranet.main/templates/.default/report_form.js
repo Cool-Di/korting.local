@@ -19,4 +19,15 @@ $(function() {
             return false;
         }
     });
+
+    /*$('.add_filefield').click(function(){
+        console.log(1);
+    });*/
+
+    //BX.onCustomEvent(this.parentNode, 'BFileDLoadFormController');
 });
+
+/*
+function addFileFiled() {
+    $('.files-block').append('<input type="file" name="FIELDS[FILES][]" />');
+}*/

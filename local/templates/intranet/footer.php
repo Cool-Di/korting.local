@@ -34,9 +34,9 @@
 	 					&& !CSite::InDir(SITE_DIR.'intranet/plans/')
 	 					&& !CSite::InDir(SITE_DIR.'intranet/reports/')
 	 					) { ?> 
-		 			<p class="text-primary h3">План на текущий месяц</p>
+		 			<?/*<p class="text-primary h3">План на текущий месяц</p>
 		 			<p class="h4"><?=number_format($sale_plan, 0, ',', ' ');?> руб</p>
-		 			<hr>
+		 			<hr>*/?>
 		 			<p class="text-primary h3">Подтверждено</p>
 		 			<p class="h4"><?=number_format($month_sale['adopted'], 2, ',', ' ');?> руб</p>
 		 			<hr>

@@ -43,7 +43,7 @@ function add_offer_show_select($sections, $active_section = '',  $level = '')
 <?//=strftime('%d.%m.%Y',strtotime("2014W401"));?>
 <?//=date('d.m.Y', strtotime('2014-10'))?>
 <?//=date('d.m.Y', strtotime('last day of 2014-10'))?>
-<form class="form-horizontal report_form" role="form" method="post">
+<form class="form-horizontal report_form" role="form" method="post" enctype='multipart/form-data'>
 	<div class="form-group">
 		<label for="inputEmail3" class="col-sm-3 control-label">ФИО</label>
 		<div class="col-sm-5">
@@ -82,7 +82,7 @@ function add_offer_show_select($sections, $active_section = '',  $level = '')
 	</div>*/?>
 	
 	
-	<div class="form-group">
+	<?/*<div class="form-group">
 		<label for="inputEmail3" class="col-sm-3 control-label">
 			Отчетный период
 		</label>
@@ -90,7 +90,6 @@ function add_offer_show_select($sections, $active_section = '',  $level = '')
 			<?
 				$day_of_week	= date('w') != 0 ? date('w') : 7;
 				$day_of_week--;
-//				echo $day_of_week;
 			?>
 			<select name="FIELDS[REPORT_DATE]" class="form-control">
 				<? for($i = $day_of_week; $i <= 105; $i+=7) { ?>
@@ -125,22 +124,24 @@ function add_offer_show_select($sections, $active_section = '',  $level = '')
 						<?=Intranet::getInstance()->GetMonthName($month)?>, <?=$week?> неделя, <?=getDaysFromWeekMonth($week, $month, $year);?>
 					</option>
 				<? } ?>
-				
-				
-				<? /*
-for($i = date('W'); $i >= 1; $i--) { ?>
-					
-					<? if(date('n', strtotime(date('Y').'-W'.$i.'-1')) != date('n', strtotime(date('Y').'-W'.$i.'-7'))) { ?>
-						<option value="<?=date('Y')?>.<?=date('n', strtotime(date('Y').'-W'.$i.'-7'))?>.<?=$i?>" <?=(date('Y').'.'.date('n', strtotime(date('Y').'-W'.$i.'-7')).'.'.$i == $arResult['FIELDS']['REPORT_DATE'] ? 'selected="selected"' : '')?>><?=Intranet::getInstance()->GetMonthName(date('n', strtotime(date('Y').'-W'.$i.'-7')))?>, <?=$i?> неделя, <?=getDaysFromWeekMonth($i, date('n', strtotime(date('Y').'-W'.$i.'-7')));?></option>
-					<? } ?>
-					
-					<option value="<?=date('Y')?>.<?=date('n', strtotime(date('Y').'-W'.$i.'-1'))?>.<?=$i?>" <?=(date('Y').'.'.date('n', strtotime(date('Y').'-W'.$i.'-1')).'.'.$i == $arResult['FIELDS']['REPORT_DATE'] ? 'selected="selected"' : '')?>><?=Intranet::getInstance()->GetMonthName(date('n', strtotime(date('Y').'-W'.$i.'-1')))?>, <?=$i?> неделя, <?=getDaysFromWeekMonth($i, date('n', strtotime(date('Y').'-W'.$i.'-1')));?></option>
-				
-				<? }
-*/ ?>
+
 			</select>
 		</div>
-	</div>
+	</div> */?>
+    <div class="form-group">
+        <label for="inputEmail3" class="col-sm-3 control-label">
+            Отчетный период
+        </label>
+        <div class="col-sm-5">
+            <select name="FIELDS[PERIOD_ID]" class="form-control">
+                <? foreach ($arResult["PERIODS"] as $period) {?>
+                    <option value="<?=$period['ID']?>">
+                        <?=$period['NAME']?> (<?=$period['ACTIVE_FROM']?> - <?=$period['ACTIVE_TO']?>)
+                    </option>
+                <?}?>
+            </select>
+        </div>
+    </div>
 	
 	<?/*
 	<div class="form-group">
@@ -262,6 +263,32 @@ for($i = date('W'); $i >= 1; $i--) { ?>
 		</table>
 		</div>
 	</div>
+
+    <div class="form-group">
+        <label for="inputEmail3" class="col-sm-3 control-label">
+            Прикреплённые файлы
+            <span class="help-block h6"> (Договор, товарный чек, ТОРГ12 и т.д.)</span>
+        </label>
+        <div class="col-sm-9">
+            <?/*<div class="files-block">
+                <input type="file" name="FIELDS[FILES][]" />
+            </div>
+            <div>
+                <a href="javascript:void(0);" class="add_filefield">Добавить поле</a>
+            </div>*/?>
+            <?$APPLICATION->IncludeComponent("bitrix:main.file.input", "drag_n_drop",
+                array(
+                    "INPUT_NAME"=>"FILES",
+                    "MULTIPLE"=>"Y",
+                    "MODULE_ID"=>"iblock",
+                    "MAX_FILE_SIZE"=>"",
+                    "ALLOW_UPLOAD"=>"A",
+                    "ALLOW_UPLOAD_EXT"=>""
+                ),
+                false
+            );?>
+        </div>
+    </div>
 	
 	<div class="form-group">
 		<label for="inputEmail3" class="col-sm-3 control-label">

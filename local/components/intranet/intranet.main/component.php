@@ -566,12 +566,13 @@ if($access_level < 100)
 			
 		
 		$report_ar			= array();
-		$arSelect 			= Array("ID", "IBLOCK_ID", "NAME", "PROPERTY_USER_ID");
+		$arSelect 			= Array("ID", "IBLOCK_ID", "NAME", "PROPERTY_USER_ID", "PROPERTY_FILES", "PROPERTY_PERIOD_ID.NAME");
 		$arFilter 			= Array("IBLOCK_ID" => Intranet::getInstance()->REPORT_IBLOCK_ID, "ID" => $report_id, 'PROPERTY_USER_ID' => $USER->GetID());
 		$res 				= CIBlockElement::GetList(Array('PROPERTY_WEEK' => 'DESC'), $arFilter, false, Array("nTopCount"=>1), $arSelect);
 		if($ob = $res->GetNextElement())
 		{
 			$arFields 				= $ob->GetFields();
+
 			$arFields['PROPERTIES']	= $ob->GetProperties();
 			
 			$arFields['USER']		= Intranet::getInstance()->GetUserArr($arFields['PROPERTIES']['USER_ID']['VALUE']);
@@ -582,6 +583,11 @@ if($access_level < 100)
 		{
 			$arResult['ERRORS'][] = 'Продажа с заданным ID не найдена';
 		}
+
+		foreach($arFields['PROPERTIES']["FILES"]["VALUE"] as $file_id){
+            $arResult['FILES'][] = CFile::GetFileArray($file_id);
+        }
+		//debugmessage($arResult['FILES']);
 
 		$arResult['REPORT']		= $report_ar;
 		
@@ -976,6 +982,26 @@ if($access_level < 100)
             ];
 			$sections_ids[$arFields['IBLOCK_SECTION_ID']]['products'][]	= $arFields;
 		}
+
+        //Получение отчетных периодов
+        //@todo - фильтр по ближайшим датам периодам
+        $arSelect = Array("ID", "NAME", "ACTIVE_FROM", "ACTIVE_TO", "PROPERTY_BONUS_DAYS");
+        $arFilter = Array(
+            "IBLOCK_ID" => Intranet::getInstance()->PERIOD_IBLOCK_ID,
+            array(
+                "LOGIC" => "OR",
+                array("ACTIVE_DATE" => "Y"),
+                array(">=PROPERTY_LAST_DAY" => date('Y-m-d')),
+            ),
+        );
+
+        $res = CIBlockElement::GetList(Array(), $arFilter, false, false, $arSelect);
+        while ($ob = $res->GetNextElement()) {
+            $arFields = $ob->GetFields();
+            $arResult['PERIODS'][$arFields['ID']] = $arFields;
+        }
+
+        //debugmessage($arResult['PERIODS']);
 		
 		$user_data	= Intranet::getInstance()->GetUserArr();
 		$city_shop	= Intranet::getInstance()->GetUserCityShop();
@@ -1044,14 +1070,25 @@ if($access_level < 100)
 				$arResult['FIELDS']['MARKETING']	= $_POST['FIELDS']['MARKETING'];
 			else
 				$arResult['FIELDS']['MARKETING']	= '';
+
+            if(isset($_POST['FIELDS']['PERIOD_ID']))
+                $arResult['FIELDS']['PERIOD_ID']	= $_POST['FIELDS']['PERIOD_ID'];
+            else
+                $arResult['ERRORS'][]	= 'Не указан отчётный период';
+
+            $arPeriod = $arResult['PERIODS'][$arResult['FIELDS']['PERIOD_ID']];
+
+            if(isset($_POST['FILES']))
+                $arResult['FIELDS']['FILES']	= $_POST['FILES'];
+
 				
-			$arResult['REPORT_DATE']			= $_POST['FIELDS']['REPORT_DATE'];
+			/*$arResult['REPORT_DATE']			= $_POST['FIELDS']['REPORT_DATE'];
 			$arResult['FIELDS']['REPORT_DATE']	= $_POST['FIELDS']['REPORT_DATE'];
 			$report_date				= explode('.', $arResult['REPORT_DATE']);
 			$arResult['REPORT_YEAR']	= $report_date[0];
 			//$arResult['WEEK_NUMBER']	= str_pad($report_date[1], 2, '0', STR_PAD_LEFT);
 			$arResult['MONTH_NUMBER']	= intval($report_date[1]);
-			$arResult['WEEK_NUMBER']	= intval($report_date[2]);
+			$arResult['WEEK_NUMBER']	= intval($report_date[2]);*/
 		
 			if(isset($arResult['REPORT']['ID']) && intval($arResult['REPORT']))
 			{
@@ -1060,7 +1097,7 @@ if($access_level < 100)
 			else
 			{
 				//Проверка не добавлялся ли уже отчет за указанный период 
-				$report_ar			= array();
+				/*$report_ar			= array();
 				$arSelect 			= Array("ID", "IBLOCK_ID", "NAME", "PROPERTY_USER_ID", "PROPERTY_YEAR", "PROPERTY_MONTH", "PROPERTY_WEEK");
 				$arFilter 			= Array("IBLOCK_ID" => Intranet::getInstance()->REPORT_IBLOCK_ID, 'PROPERTY_USER_ID' => $USER->GetID(), "PROPERTY_YEAR" => $arResult['REPORT_YEAR'], "PROPERTY_MONTH" => $arResult['MONTH_NUMBER'], "PROPERTY_WEEK" => $arResult['WEEK_NUMBER']);
 				$res 				= CIBlockElement::GetList(Array('PROPERTY_WEEK' => 'DESC'), $arFilter, false, Array("nTopCount"=>1), $arSelect);//dump($arFilter);
@@ -1069,7 +1106,7 @@ if($access_level < 100)
 					$arFields 				= $ob->GetFields();
 					//$arFields['PROPERTIES']	= $ob->GetProperties();
 					$arResult['ERRORS'][]	= 'Продажа за указанную дату уже добавлялась';
-				}
+				}*/
 				//---
 			}
 		
@@ -1129,9 +1166,13 @@ if($access_level < 100)
 			{
 				$el = new CIBlockElement;
 
-				$report_name =  $arResult['CITY']['NAME'].'/'.$arResult['SHOP']['NAME'].', '
-									.Intranet::getInstance()->GetMonthName($arResult['MONTH_NUMBER']).' '.$arResult['WEEK_NUMBER'].' неделя '.$arResult['REPORT_YEAR'].', '. getDaysFromWeek($arResult['WEEK_NUMBER']).', '.$arResult['FIO'];
-				
+				//$report_name =  $arResult['CITY']['NAME'].'/'.$arResult['SHOP']['NAME'].', '
+				//					.Intranet::getInstance()->GetMonthName($arResult['MONTH_NUMBER']).' '.$arResult['WEEK_NUMBER'].' неделя '.$arResult['REPORT_YEAR'].', '. getDaysFromWeek($arResult['WEEK_NUMBER']).', '.$arResult['FIO'];
+
+                $report_name =  $arResult['CITY']['NAME'].'/'.$arResult['SHOP']['NAME'].', '
+									.$arPeriod['NAME'].', '.$arResult['FIO'];
+
+
 				$PROP 					= array();
 				$PROP['FIO'] 			= $arResult['FIO'];
 				$PROP['USER_ID']		= $USER->GetID();
@@ -1143,15 +1184,17 @@ if($access_level < 100)
 				$PROP['PRICE']			= $arResult['PRICE_SUM'];
 				$PROP['COMMENT']		= $arResult['FIELDS']['COMMENT'];
 				$PROP['MARKETING']		= $arResult['FIELDS']['MARKETING'];
+                $PROP['PERIOD_ID']		= $arResult['FIELDS']['PERIOD_ID'];
+                $PROP['FILES']		    = $arResult['FIELDS']['FILES'];
 				
 				$PROP['PRODUCTS_TEXT'][0] = Array("VALUE" => Array ("TEXT" => $product_string, "TYPE" => "text"));
 				
 				//$PROP['MONTH']		= date('Y.m', strtotime(date('Y').'W'.$week));
 				//$PROP['WEEK']			= $arResult['REPORT_YEAR'].'.'.$arResult['WEEK_NUMBER'];
 				
-				$PROP['YEAR']			= $arResult['REPORT_YEAR'];
+				/*$PROP['YEAR']			= $arResult['REPORT_YEAR'];
 				$PROP['MONTH']			= $arResult['MONTH_NUMBER'];
-				$PROP['WEEK']			= $arResult['WEEK_NUMBER'];
+				$PROP['WEEK']			= $arResult['WEEK_NUMBER'];*/
 				//$PROP['MONTH']		= date('n', strtotime(date('Y').'W'.$week));
 				//$PROP['YEAR']			= date('Y', strtotime(date('Y').'W'.$week));
 				
