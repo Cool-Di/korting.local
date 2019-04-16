@@ -204,9 +204,9 @@ function add_offer_show_select($sections, $active_section = '',  $level = '')
 				<tr>
 					<th>Название</th>
 					<th>Код</th>
-					<th>Цена, руб</th>
+					<th>Баллы</th>
 					<th>Кол-во</th>
-					<th class="text-right">Стоимость</th>
+					<th class="text-right">Сумма</th>
 					<th class="col-xs-1">Удалить</th>
 				</tr>
 			</thead>
@@ -216,12 +216,13 @@ function add_offer_show_select($sections, $active_section = '',  $level = '')
 					<td class="p_name">{NAME}</td>
 					<td class="p_code">{ARTICLE}</td>
 					<td class="col-xs-2">
-						<input type="text" class="form-control input-sm" name="FIELDS[PRODUCT_PRICE][]" placeholder="Цена" value="" />
+                        {POINTS}
+						<input type="hidden" class="form-control input-sm" name="FIELDS[PRODUCT_PRICE][]" value="{POINTS}" />
 					</td>
 					<td class="col-xs-2">
 						<input type="number" class="form-control input-sm" name="FIELDS[PRODUCT_COUNT][]" value="1" />
 					</td>
-					<td class="p_price text-right"></td>
+					<td class="p_price text-right">{TOTAL_PRICE}</td>
 					<td><button type="button" class="close" aria-hidden="true">&times;</button></td>
 				</tr>
 				<?

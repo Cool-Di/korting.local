@@ -924,12 +924,16 @@ if($access_level < 100)
 		if(!intval($user_data['ID']))
 			return false;
 			
-		$reports			= array();
+		$reports	= array();
 		
-		$arSelect 			= Array("ID", "IBLOCK_ID", "NAME", "PROPERTIES_WEEK");
-		$arFilter 			= Array("IBLOCK_ID" => Intranet::getInstance()->REPORT_IBLOCK_ID, 'PROPERTY_USER_ID' => $user_data['ID']);
+		$arSelect 	= Array("ID", "IBLOCK_ID", "NAME", "ACTIVE_FROM", "PROPERTY_PERIOD_ID.NAME");
+		$arFilter 	= Array(
+		                "IBLOCK_ID" => Intranet::getInstance()->REPORT_IBLOCK_ID,
+                        "!DATE_ACTIVE_FROM" => false,
+                        'PROPERTY_USER_ID' => $user_data['ID']
+                        );
 
-		$res 				= CIBlockElement::GetList(Array('PROPERTY_YEAR' => 'DESC', 'PROPERTY_WEEK' => 'DESC'), $arFilter, false, Array("nTopCount"=>20), $arSelect);
+		$res 				= CIBlockElement::GetList(Array('ID' => 'DESC'), $arFilter, false, Array("nTopCount"=>20), $arSelect);
 		while($ob = $res->GetNextElement())
 		{
 			$arFields 				= $ob->GetFields();
@@ -939,6 +943,7 @@ if($access_level < 100)
 		}
 		
 		$arResult['REPORTS']		= $reports;
+		//debugmessage($arResult['REPORTS']);
 		
 		return $arResult;
 	}
@@ -968,7 +973,7 @@ if($access_level < 100)
 		
 		//Получение товаров
 		$products	= array();
-		$arSelect 	= Array("ID", "NAME", "IBLOCK_SECTION_ID", "PROPERTY_ARTICLE");
+		$arSelect 	= Array("ID", "NAME", "IBLOCK_SECTION_ID", "PROPERTY_ARTICLE", "PROPERTY_POINTS");
 		$arFilter 	= Array("IBLOCK_ID" => Intranet::getInstance()->PRODUCT_IBLOCK_ID);
 		$res 		= CIBlockElement::GetList(Array(), $arFilter, false, Array("nTopCount"=>9999), $arSelect);
 		while($ob = $res->GetNextElement())
@@ -978,10 +983,13 @@ if($access_level < 100)
             $arResult['JSON_PRODUCTS'][] = [
                 "value" => $arFields['ID'],
                 "label" => trim($arFields["NAME"]), //trim на всякий случай
-                "article" => $arFields["PROPERTY_ARTICLE_VALUE"]
+                "article" => $arFields["PROPERTY_ARTICLE_VALUE"],
+                "points" => $arFields["PROPERTY_POINTS_VALUE"]
             ];
 			$sections_ids[$arFields['IBLOCK_SECTION_ID']]['products'][]	= $arFields;
 		}
+
+		//debugmessage($arResult['JSON_PRODUCTS']);
 
         //Получение отчетных периодов
         //@todo - фильтр по ближайшим датам периодам
@@ -1212,6 +1220,7 @@ if($access_level < 100)
 					"PROPERTY_VALUES"	=> $PROP,
 					"NAME"           	=> $report_name,
 					"ACTIVE"         	=> "Y",
+                    "ACTIVE_FROM"       => ConvertTimeStamp(time(), "FULL", "ru"),
 					"PREVIEW_TEXT"   	=> "",
 					"DETAIL_TEXT"    	=> "",
 					"DETAIL_TEXT_TYPE" 	=> "text",
