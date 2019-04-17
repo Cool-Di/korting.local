@@ -1149,3 +1149,7 @@ form.plan_filter div.form-group label {display: block;}
 	overflow-y: auto;
 	overflow-x: hidden;
 }
+
+.center-group {
+	text-align: center;
+}

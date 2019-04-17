@@ -1,9 +1,11 @@
 $(function() {
-    $( "#modelAutocomplite" ).autocomplete({
+    $( "#modelAutocomplite" ).autocomplete({ //дублируется функционал при выборе модели из списка
         source: jsonProducts,
         select: function( event, ui ) {
-            //$(this).data("id", ui.item.value );
-            //$(this).val( ui.item.label );
+
+            if(ReportForm.IsItemExist(ui.item.value))
+                return false;
+
             p_template	= ReportForm.p_template;
             p_template	= '<tr>' + p_template + '</tr>';
             p_template	= p_template.replace(/{ID}/g, ui.item.value);
@@ -18,6 +20,8 @@ $(function() {
                 $('form.report_form table.product_list').slideDown('slow');
 
             ReportForm.ReCalcResultPrice();
+
+            this.value = ""; //обнуляем инпут
 
             return false;
         }

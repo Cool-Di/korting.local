@@ -21,7 +21,7 @@ function get_product()
 {
 	//Получение товаров
 	$products	= array();
-	$arSelect 	= Array("ID", "NAME", "IBLOCK_SECTION_ID", "PROPERTY_ARTICLE");
+	$arSelect 	= Array("ID", "NAME", "IBLOCK_SECTION_ID", "PROPERTY_ARTICLE", "PROPERTY_POINTS");
 	$arFilter 	= Array("IBLOCK_ID" => Intranet::getInstance()->PRODUCT_IBLOCK_ID);
 	
 	if(isset($_REQUEST['section_id']) && intval($_REQUEST['section_id']))
@@ -42,7 +42,7 @@ function get_product()
 		<div class="content">
 */ ?>
 			<? foreach($products as $product) { ?>
-				<option value="<?=$product['ID']?>" article="<?=$product['PROPERTY_ARTICLE_VALUE']?>"><?=$product['NAME']?></option>
+				<option value="<?=$product['ID']?>" data-article="<?=$product['PROPERTY_ARTICLE_VALUE']?>" data-points="<?=$product['PROPERTY_POINTS_VALUE']?>"><?=$product['NAME']?></option>
 			<? } ?>
 		<? /*
 </div>

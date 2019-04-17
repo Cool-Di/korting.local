@@ -938,6 +938,7 @@ if($access_level < 100)
 		{
 			$arFields 				= $ob->GetFields();
 			$arFields['PROPERTIES']	= $ob->GetProperties();
+            $arFields['ACTIVE_FROM'] = ConvertDateTime($arFields['ACTIVE_FROM'], "DD.MM.YYYY", "ru");
 			
 			$reports[]				= $arFields;
 		}
@@ -992,7 +993,6 @@ if($access_level < 100)
 		//debugmessage($arResult['JSON_PRODUCTS']);
 
         //Получение отчетных периодов
-        //@todo - фильтр по ближайшим датам периодам
         $arSelect = Array("ID", "NAME", "ACTIVE_FROM", "ACTIVE_TO", "PROPERTY_BONUS_DAYS");
         $arFilter = Array(
             "IBLOCK_ID" => Intranet::getInstance()->PERIOD_IBLOCK_ID,
@@ -1067,7 +1067,12 @@ if($access_level < 100)
 		
 		if(isset($_POST) && sizeof($_POST) > 0)
 		{
+
 			$arResult['FIELDS']		= array();
+
+			if(empty($_POST['FIELDS']['PRODUCT_ID'])) {
+                $arResult['ERRORS'][]	= 'Необходимо добавить хотя бы одну модель';
+            }
 			
 			if(isset($_POST['FIELDS']['COMMENT']))
 				$arResult['FIELDS']['COMMENT']	= $_POST['FIELDS']['COMMENT'];

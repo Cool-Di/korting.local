@@ -20,9 +20,9 @@ $(document).ready(function() {
 			if($('form.report_form table.product_list tr').size() < 2)
 				$('form.report_form table.product_list').hide();
 				
-			/*$('form.report_form button.add_product').click(function(){
+			$('form.report_form button.add_product').click(function(){
 				ReportForm.AddProduct($(this));
-			});*/
+			});
 			
 			$(document).on('change', 'form.report_form table.product_list input[name="FIELDS[PRODUCT_PRICE][]"], form.report_form table.product_list input[name="FIELDS[PRODUCT_COUNT][]"]', function(){
 				
@@ -35,15 +35,16 @@ $(document).ready(function() {
 			
 			
 			$(document).on('click', 'form.report_form table.product_list button.close', function(){
-				$(this).parents('tr').slideUp('fast', function(){
+				$(this).parents('tr').slideUp('fast', function () {
 					$(this).remove();
-				});	
+					ReportForm.ReCalcResultPrice();
+				});
 			});
 			
 			
-			/*$('form.report_form button.add_model').click(function(){
+			$('form.report_form button.add_model').click(function(){
 				ReportForm.AddProduct($(this));
-			});*/
+			});
 			
 			$('select.product_section').change(function(){
 				$.fancybox.showLoading();
@@ -96,6 +97,7 @@ $(document).ready(function() {
 		{
 			var totla_price	= 0;
 			var totla_count	= 0;
+
 			$('form.report_form table.product_list input[name="FIELDS[PRODUCT_COUNT][]"]').each(function(){
 				totla_price	+= $(this).parents('tr').find('input[name="FIELDS[PRODUCT_PRICE][]"]').val() * $(this).val();
 				totla_count += parseInt($(this).val());
@@ -103,39 +105,43 @@ $(document).ready(function() {
 
 			$('form.report_form table.product_list td.result_price').html(totla_price);
 			$('form.report_form table.product_list td.result_count').html(totla_count);
-		}
-		//AddProduct заменён на функцию select в autocomplite
-		/*AddProduct: function(button)
+		},
+		//AddProduct есть аналог в autocomplite
+		AddProduct: function(button)
 		{
 			var p_template 	= this.p_template;
 			
 			var select 		= button.parents('div.form-group').find('select');
 			
 			var id			= select.val();
-			
-			if($('form.report_form table.product_list input[name="FIELDS[PRODUCT_ID][]"][value="'+id+'"]').size() > 0)
-			{
-				alert('Данный товар уже добавлен в отчет');
+
+			if(ReportForm.IsItemExist(id))
 				return;
-			}
-				
-			//p_template	= '<tr>' + p_template + '</tr>';
-			//p_template	= p_template.replace(/{ID}/g, $('select.product_list').val());
-			//p_template	= p_template.replace(/{NAME}/g, $('select.product_list option:selected').text().trim());
-			//p_template	= p_template.replace(/{ARTICLE}/g, $('select.product_list option:selected').attr('article'));
 				
 			p_template	= '<tr>' + p_template + '</tr>';
 			p_template	= p_template.replace(/{ID}/g, select.val());
-			//p_template	= p_template.replace(/{NAME}/g, select.find('option:selected').text().trim());
 			p_template	= p_template.replace(/{NAME}/g, $.trim(select.find('option:selected').text()));
+			p_template	= p_template.replace(/{ARTICLE}/g, select.find('option:selected').data('article'));
+			p_template	= p_template.replace(/{POINTS}/g, select.find('option:selected').data('points'));
+			p_template	= p_template.replace(/{TOTAL_PRICE}/g, select.find('option:selected').data('points'));
 
-			p_template	= p_template.replace(/{ARTICLE}/g, select.find('option:selected').attr('article'));
-						
 			$('form.report_form table.product_list tbody').append(p_template);
 			
 			if($('form.report_form table.product_list').is(':hidden'))
 				$('form.report_form table.product_list').slideDown('slow');
-		}*/
+
+			ReportForm.ReCalcResultPrice();
+		},
+		IsItemExist: function(id)
+		{
+			if($('form.report_form table.product_list input[name="FIELDS[PRODUCT_ID][]"][value="'+id+'"]').size() > 0)
+			{
+				alert('Данный товар уже добавлен в отчет');
+				return true;
+			} else {
+				return false;
+			}
+		}
 	}
 
 	ReportForm.Init();

@@ -143,7 +143,7 @@ function add_offer_show_select($sections, $active_section = '',  $level = '')
         </div>
     </div>
 	
-	<?/*
+
 	<div class="form-group">
 		<label for="inputEmail3" class="col-sm-3 control-label">Продукт</label>
 		<div class="col-sm-5">
@@ -173,12 +173,15 @@ function add_offer_show_select($sections, $active_section = '',  $level = '')
 			<button type="button" class="btn btn-success add_product">Добавить</button>
 		</div>
 	</div>
-*/?>
+
+    <div class="form-group center-group">
+       - ИЛИ -
+    </div>
 
     <div class="form-group">
-        <label for="inputEmail3" class="col-sm-3 control-label">Модель</label>
+        <label for="inputEmail3" class="col-sm-3 control-label">Поиск по названию</label>
         <div class="col-sm-5">
-            <input type="text" class="form-control" id="modelAutocomplite" placeholder="Модель">
+            <input type="text" class="form-control" id="modelAutocomplite" placeholder="Начните вводить навзание модели">
         </div>
     </div>
 
@@ -271,12 +274,6 @@ function add_offer_show_select($sections, $active_section = '',  $level = '')
             <span class="help-block h6"> (Договор, товарный чек, ТОРГ12 и т.д.)</span>
         </label>
         <div class="col-sm-9">
-            <?/*<div class="files-block">
-                <input type="file" name="FIELDS[FILES][]" />
-            </div>
-            <div>
-                <a href="javascript:void(0);" class="add_filefield">Добавить поле</a>
-            </div>*/?>
             <?$APPLICATION->IncludeComponent("bitrix:main.file.input", "drag_n_drop",
                 array(
                     "INPUT_NAME"=>"FILES",
@@ -293,7 +290,7 @@ function add_offer_show_select($sections, $active_section = '',  $level = '')
 	
 	<div class="form-group">
 		<label for="inputEmail3" class="col-sm-3 control-label">
-			Комментарии к работе
+			Комментарий для менеджера
 			<span class="help-block h6"> (все устраивает, хорошо работает менеджер, слишком много товара, высокая проходимость и тп.)</span>
 		</label>
 		<div class="col-sm-5">

@@ -85,7 +85,7 @@
 			<td><?=number_format($product_price, 0, ',', ' ');?> руб.</td>
 		</tr>
 		<tr>
-			<td><strong>Комментарии к работе</strong></td>
+			<td><strong>Комментарий для менеджера</strong></td>
 			<td><?=$arResult['REPORT']['PROPERTIES']['COMMENT']['VALUE']?></td>
 		</tr>
 		<tr>
