@@ -3,7 +3,7 @@
 <h3>Список продаж</h3>
 <br/>
 <form class="form-inline reports_form" role="form">
-	<div class="form-group">
+	<?/*<div class="form-group">
 		<label class="" for="FILTERS[PROPERTY_CITY_ID]">Месяц</label>
 		<select name="FILTERS[PROPERTY_MONTH]" class="form-control">
 			<option value="">-</option>
@@ -11,7 +11,16 @@
 				<option value="<?=$year_month['YEAR']?>.<?=$year_month['MONTH']?>" <?=($year_month['MONTH'] == $arResult['FILTERS']['PROPERTY_MONTH'] && $year_month['YEAR'] == $arResult['FILTERS']['PROPERTY_YEAR'] ? 'selected="selected"' : '')?>><?=$year_month['YEAR']?> <?=Intranet::getInstance()->GetMonthName($year_month['MONTH'])?></option>
 			<? } ?>
 		</select>
-	</div>
+	</div>*/?>
+    <div class="form-group">
+        <label class="" for="FILTERS[PROPERTY_PERIOD_ID]">Период</label>
+        <select name="FILTERS[PROPERTY_PERIOD_ID]" class="form-control">
+            <option value="">-</option>
+            <? foreach($arResult['PERIODS'] as $period) { ?>
+                <option value="<?=$period['ID']?>" <?=($period['ID'] == $arResult['FILTERS']['PROPERTY_PERIOD_ID'] ? 'selected="selected"' : '')?>><?=$period['NAME']?></option>
+            <? } ?>
+        </select>
+    </div>
 	<div class="form-group">
 		<label class="" for="FILTERS[PROPERTY_CITY_ID]">Город</label>
 		<select name="FILTERS[PROPERTY_CITY_ID]" class="form-control">

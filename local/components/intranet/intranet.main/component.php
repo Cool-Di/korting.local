@@ -703,7 +703,7 @@ if($access_level < 100)
 		$arResult['CITIES']	= $cities;	
 		
 		$yaer_month			= array();
-		$arSelect 			= Array("ID", "IBLOCK_ID", "NAME", "PROPERTY_USER_ID", 'PROPERTY_YEAR', 'PROPERTY_MONTH');
+		$arSelect 			= Array("ID", "IBLOCK_ID", "NAME", "PROPERTY_USER_ID", 'PROPERTY_PERIOD_ID');
 		$arFilter 			= Array("IBLOCK_ID" => Intranet::getInstance()->REPORT_IBLOCK_ID);
 		$res 				= CIBlockElement::GetList(false, $arFilter, array('PROPERTY_YEAR', 'PROPERTY_MONTH'), Array("nTopCount"=>300), $arSelect);
 		while($ob = $res->GetNextElement())
@@ -715,14 +715,25 @@ if($access_level < 100)
 								'MONTH' => $arFields['PROPERTY_MONTH_VALUE'],
 								'MONTH_NAME' => Intranet::getInstance()->GetMonthName($arFields['PROPERTY_MONTH_VALUE']),
 							);
-			$yaer_month[$arFields['PROPERTY_YEAR_VALUE'].'.'.$arFields['PROPERTY_MONTH_VALUE']]	= $tmp_year_month;
+			//$yaer_month[$arFields['PROPERTY_YEAR_VALUE'].'.'.$arFields['PROPERTY_MONTH_VALUE']]	= $tmp_year_month;
 		}
-		krsort($yaer_month);
-		$arResult['YEAR_MONTH']	= $yaer_month;	
+		//krsort($yaer_month);
+		//$arResult['YEAR_MONTH']	= $yaer_month;
+
+        //Получение отчетных периодов
+        $arSelect = Array("ID", "NAME", "ACTIVE_FROM", "ACTIVE_TO", "PROPERTY_BONUS_DAYS");
+        $arFilter = Array(
+            "IBLOCK_ID" => Intranet::getInstance()->PERIOD_IBLOCK_ID,
+        );
+        $res = CIBlockElement::GetList(Array(), $arFilter, false, false, $arSelect);
+        while ($ob = $res->GetNextElement()) {
+            $arFields = $ob->GetFields();
+            $arResult['PERIODS'][$arFields['ID']] = $arFields;
+        }
 		
 		
 		//Определение свойств по которым можно фильтровать
-		$filter_property		= array("PROPERTY_CITY_ID", "PROPERTY_SHOP_ID", "PROPERTY_USER_ID");
+		$filter_property		= array("PROPERTY_CITY_ID", "PROPERTY_SHOP_ID", "PROPERTY_USER_ID", "PROPERTY_PERIOD_ID");
 		$arResult['FILTERS']	= array();
 		foreach($filter_property as $fp)
 		{
@@ -730,13 +741,13 @@ if($access_level < 100)
 				$arResult['FILTERS'][$fp]	= intval($_REQUEST['FILTERS'][$fp]);
 		}
 		
-		if(isset($_REQUEST['FILTERS']['PROPERTY_MONTH']) && $_REQUEST['FILTERS']['PROPERTY_MONTH'] != '')
+		/*if(isset($_REQUEST['FILTERS']['PROPERTY_MONTH']) && $_REQUEST['FILTERS']['PROPERTY_MONTH'] != '')
 		{
 			$filter_yaer_month	= explode('.', $_REQUEST['FILTERS']['PROPERTY_MONTH']);
 			
 			$arResult['FILTERS']['PROPERTY_YEAR']	= $filter_yaer_month[0];
 			$arResult['FILTERS']['PROPERTY_MONTH']	= $filter_yaer_month[1];
-		}
+		}*/
 
 		if(!isset($arResult['FILTERS']['PROPERTY_MONTH']))
 		{
@@ -1002,7 +1013,6 @@ if($access_level < 100)
                 array(">=PROPERTY_LAST_DAY" => date('Y-m-d')),
             ),
         );
-
         $res = CIBlockElement::GetList(Array(), $arFilter, false, false, $arSelect);
         while ($ob = $res->GetNextElement()) {
             $arFields = $ob->GetFields();
