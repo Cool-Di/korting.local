@@ -964,6 +964,7 @@ if($access_level < 100)
 	{
 		//dump($_REQUEST);
 		global $USER;
+		global $DB;
 	
 		$arResult			= array();
 		$arResult['ERRORS']	= array();
@@ -1003,8 +1004,11 @@ if($access_level < 100)
 
 		//debugmessage($arResult['JSON_PRODUCTS']);
 
+        //Доступный интервал выбора даты продажи
+        $startDate = false;
+		$endDate = false;
         //Получение отчетных периодов
-        $arSelect = Array("ID", "NAME", "ACTIVE_FROM", "ACTIVE_TO", "PROPERTY_BONUS_DAYS");
+        $arSelect = Array("ID", "NAME", "ACTIVE_FROM", "ACTIVE_TO", "PROPERTY_LAST_DAY");
         $arFilter = Array(
             "IBLOCK_ID" => Intranet::getInstance()->PERIOD_IBLOCK_ID,
             array(
@@ -1016,10 +1020,28 @@ if($access_level < 100)
         $res = CIBlockElement::GetList(Array(), $arFilter, false, false, $arSelect);
         while ($ob = $res->GetNextElement()) {
             $arFields = $ob->GetFields();
-            $arResult['PERIODS'][$arFields['ID']] = $arFields;
+            //Переводим время в класс PHP
+            $periodStartDate = DateTime::createFromFormat("d.m.Y", $arFields["ACTIVE_FROM"]);
+            $periodEndDate = DateTime::createFromFormat("d.m.Y", $arFields["ACTIVE_TO"]);
+            //Сравниваем локальные даты с глобальными и расширяем доступный интервал если нужно
+            if(!$startDate || ($startDate && $startDate > $periodStartDate)) {
+                $startDate = $periodStartDate;
+            }
+            if(!$endDate || ($endDate && $endDate < $periodEndDate)) {
+                $endDate = $periodEndDate;
+            }
+
+            //$arResult['PERIODS'][$arFields['ID']] = $arFields;
         }
 
-        //debugmessage($arResult['PERIODS']);
+        $arResult["START_DATE"] = [
+            "JS" => $startDate->format('Y-m-d'),
+            "PHP" => $startDate->format('d.m.Y'),
+        ];
+        $arResult["END_DATE"] = [
+            "JS" => $endDate->format('Y-m-d'),
+            "PHP" => $endDate->format('d.m.Y'),
+        ];
 		
 		$user_data	= Intranet::getInstance()->GetUserArr();
 		$city_shop	= Intranet::getInstance()->GetUserCityShop();
@@ -1094,12 +1116,42 @@ if($access_level < 100)
 			else
 				$arResult['FIELDS']['MARKETING']	= '';
 
-            if(isset($_POST['FIELDS']['PERIOD_ID']))
+            /*if(isset($_POST['FIELDS']['PERIOD_ID']))
                 $arResult['FIELDS']['PERIOD_ID']	= $_POST['FIELDS']['PERIOD_ID'];
             else
-                $arResult['ERRORS'][]	= 'Не указан отчётный период';
+                $arResult['ERRORS'][]	= 'Не указан отчётный период';*/
 
-            $arPeriod = $arResult['PERIODS'][$arResult['FIELDS']['PERIOD_ID']];
+            if($_POST['FIELDS']['SALE_DATE']) {
+                if($saleDate = DateTime::createFromFormat("d.m.Y", $_POST['FIELDS']['SALE_DATE'])){
+                    $arResult['FIELDS']['SALE_DATE'] = $_POST['FIELDS']['SALE_DATE'];
+                    if($saleDate < $startDate || $saleDate > $endDate) {
+                        $arResult['ERRORS'][] = 'Дата продажи не входит в доступный интервал';
+                    }
+                } else {
+                    $arResult['ERRORS'][] = 'Неверный формат даты продажи';
+                }
+            } else {
+                $arResult['ERRORS'][] = 'Не указана дата продажи';
+            }
+
+            //Поиск доступного периода по дате продажи
+            $arSelect = Array("ID", "NAME", "ACTIVE_FROM", "ACTIVE_TO", "PROPERTY_LAST_DAY");
+            $arFilter = Array(
+                "IBLOCK_ID" => Intranet::getInstance()->PERIOD_IBLOCK_ID,
+                "<=DATE_ACTIVE_FROM" => $arResult['FIELDS']['SALE_DATE'],
+                ">=DATE_ACTIVE_TO" => $arResult['FIELDS']['SALE_DATE'],
+            );
+            $res = CIBlockElement::GetList(Array(), $arFilter, false, false, $arSelect);
+            if($ob = $res->GetNextElement()) {
+                $arFields = $ob->GetFields();
+                $arResult['FIELDS']['PERIOD_ID'] = $arFields['ID'];
+                $arPeriod = $arFields;
+            } else {
+                $arResult['ERRORS'][] = 'Отчётный период не найден';
+            }
+
+
+            //$arPeriod = $arResult['PERIODS'][$arResult['FIELDS']['PERIOD_ID']];
 
             if(isset($_POST['FILES']))
                 $arResult['FIELDS']['FILES']	= $_POST['FILES'];
@@ -1208,6 +1260,7 @@ if($access_level < 100)
 				$PROP['COMMENT']		= $arResult['FIELDS']['COMMENT'];
 				$PROP['MARKETING']		= $arResult['FIELDS']['MARKETING'];
                 $PROP['PERIOD_ID']		= $arResult['FIELDS']['PERIOD_ID'];
+                $PROP['SALE_DATE']		= $arResult['FIELDS']['SALE_DATE'];
                 $PROP['FILES']		    = $arResult['FIELDS']['FILES'];
 				
 				$PROP['PRODUCTS_TEXT'][0] = Array("VALUE" => Array ("TEXT" => $product_string, "TYPE" => "text"));
@@ -1256,6 +1309,9 @@ if($access_level < 100)
 				{
 					if($PRODUCT_ID = $el->Add($arLoadProductArray))
 					{
+                        $statusId = Intranet::getStatusIdByXmlId(Intranet::getInstance()->REPORT_IBLOCK_ID,"S1");
+                        CIBlockElement::SetPropertyValuesEx($PRODUCT_ID, Intranet::getInstance()->REPORT_IBLOCK_ID, array("STATUS" => $statusId));
+
 						echo "New ID: ".$PRODUCT_ID;
 						$arResult['SUCCESSFUL']	= 1;
 						

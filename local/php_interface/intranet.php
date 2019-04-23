@@ -331,9 +331,19 @@ class Intranet
 				
 			$reports[]				= $arFields;
 		}
-echo 'ddd';
+        echo 'ddd';
 		return $reports;
 	}
+
+	public function getStatusIdByXmlId($iblock_id, $xml_id) {
+        $property_enums = CIBlockPropertyEnum::GetList(Array("DEF"=>"DESC", "SORT"=>"ASC"), Array("IBLOCK_ID"=>$iblock_id, "XML_ID"=>$xml_id));
+        if($enum_fields = $property_enums->GetNext())
+        {
+            return $enum_fields["ID"];
+        } else {
+            throw new \Exception('Ошибка определения кода свойства');
+        }
+    }
 }
 
 

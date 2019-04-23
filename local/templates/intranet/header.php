@@ -16,6 +16,7 @@ $obAsset = \Bitrix\Main\Page\Asset::getInstance();
     <?php
     $obAsset->addJs('https://code.jquery.com/jquery.js');
     $obAsset->addJs('/assets/js/vendor/jquery-ui-1.12.1/jquery-ui.min.js');
+    $obAsset->addJs('/assets/js/vendor/jquery-ui-1.12.1/datepicker-ru.js');
     $obAsset->addJs('/intranet/media/bootsrtap/js/bootstrap.min.js'); //Include all compiled plugins (below), or include individual files as needed
 
     $obAsset->addJs('/intranet/media/fancyapps/source/jquery.fancybox.pack.js?v=2.1.5'); //Add fancyBox

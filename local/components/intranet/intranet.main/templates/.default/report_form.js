@@ -26,6 +26,13 @@ $(function() {
             return false;
         }
     });
+    $.datepicker.setDefaults( $.datepicker.regional[ "ru" ] );
+
+    $('.datepicker').datepicker({
+        format: 'dd.mm.yyyy',
+        minDate: new Date(startDate),
+        maxDate: new Date(endDate)
+    });
 
     /*$('.add_filefield').click(function(){
         console.log(1);

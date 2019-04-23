@@ -1153,3 +1153,8 @@ form.plan_filter div.form-group label {display: block;}
 .center-group {
 	text-align: center;
 }
+
+.form-control-date {
+	display: inline-block !important;
+	width: 92% !important;
+}

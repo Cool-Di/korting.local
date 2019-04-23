@@ -30,6 +30,8 @@ function add_offer_show_select($sections, $active_section = '',  $level = '')
 ?>
 <script>
     jsonProducts = <?=json_encode($arResult["JSON_PRODUCTS"]);?>;
+    startDate = <?=json_encode($arResult["START_DATE"]["JS"])?>;
+    endDate = <?=json_encode($arResult["END_DATE"]["JS"])?>
 </script>
 
 <? if(sizeof($arResult['ERRORS']) > 0) { ?>
@@ -43,7 +45,7 @@ function add_offer_show_select($sections, $active_section = '',  $level = '')
 <?//=strftime('%d.%m.%Y',strtotime("2014W401"));?>
 <?//=date('d.m.Y', strtotime('2014-10'))?>
 <?//=date('d.m.Y', strtotime('last day of 2014-10'))?>
-<form class="form-horizontal report_form" role="form" method="post" enctype='multipart/form-data'>
+<form class="form-horizontal report_form" role="form" method="post" name="report_form" enctype='multipart/form-data'>
 	<div class="form-group">
 		<label for="inputEmail3" class="col-sm-3 control-label">ФИО</label>
 		<div class="col-sm-5">
@@ -128,7 +130,7 @@ function add_offer_show_select($sections, $active_section = '',  $level = '')
 			</select>
 		</div>
 	</div> */?>
-    <div class="form-group">
+    <?/*<div class="form-group">
         <label for="inputEmail3" class="col-sm-3 control-label">
             Отчетный период
         </label>
@@ -140,6 +142,25 @@ function add_offer_show_select($sections, $active_section = '',  $level = '')
                     </option>
                 <?}?>
             </select>
+        </div>
+    </div>*/?>
+
+    <div class="form-group">
+        <label for="inputEmail3" class="col-sm-3 control-label">
+            Дата продажи
+        </label>
+        <div class="col-sm-5">
+            <?/*$APPLICATION->IncludeComponent("bitrix:main.calendar","",Array(
+                    "SHOW_INPUT" => "Y",
+                    "FORM_NAME" => "report_form",
+                    "INPUT_NAME" => "SALE_DATE",
+                    "INPUT_VALUE" => "",
+                    "SHOW_TIME" => "N",
+                    "HIDE_TIMEBAR" => "Y",
+                    'INPUT_ADDITIONAL_ATTR' => 'class="form-control-date form-control"'
+                )
+            );*/?>
+            <input type="text" name="FIELDS[SALE_DATE]" value="<?=$arResult['FIELDS']['SALE_DATE']?>" class="form-control datepicker" placeholder="Дата продажи" autocomplete="off">
         </div>
     </div>
 	
