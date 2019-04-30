@@ -47,7 +47,7 @@
 				    <th>Продукт</th>
 				    <th>Название</th>
 				    <th>Артикул</th>
-				    <th>Цена</th>
+				    <th>Баллы</th>
 				    <th>Количество</th>
 				  </tr>
 				</thead>
@@ -65,7 +65,7 @@
 						<td><?=$product['CATEGORY_NAME']?></td>
 						<td><?=$product['NAME']?></td>
 						<td><?=$product['ARTICLE']?></td>
-						<td><?=number_format($product['PRICE'], 0, ',', ' ');?> руб.</td>
+						<td><?=number_format($product['PRICE'], 0, ',', ' ');?> </td>
 						<td><?=$product['COUNT']?>шт.</td>
 					</tr>
 					<?
@@ -81,16 +81,12 @@
 			<td><?=$product_count?></td>
 		</tr>
 		<tr>
-			<td><strong>Общая сумма</strong></td>
-			<td><?=number_format($product_price, 0, ',', ' ');?> руб.</td>
+			<td><strong>Сумма баллов</strong></td>
+			<td><?=number_format($product_price, 0, ',', ' ');?> </td>
 		</tr>
 		<tr>
 			<td><strong>Комментарий для менеджера</strong></td>
 			<td><?=$arResult['REPORT']['PROPERTIES']['COMMENT']['VALUE']?></td>
-		</tr>
-		<tr>
-			<td><strong>Маркетинговые активности</strong></td>
-			<td><?=$arResult['REPORT']['PROPERTIES']['MARKETING']['VALUE']?></td>
 		</tr>
 		<tr>
 			<td><strong>Принят</strong></td>

@@ -21,6 +21,13 @@ class Intranet
 											'SELLER' => 8, 
 											'ADMIN' => 1
 										);
+
+    /**
+     * Массив с спосоставлением статусов и их XML_ID
+     * Запрос срабатывает только 1 раз, при обращении повторно выдаётся уже полученный результат
+     * @var array
+     */
+	private $reportStatuses = [];
 	
 	public static function getInstance()
 	{
@@ -335,13 +342,34 @@ class Intranet
 		return $reports;
 	}
 
-	public function getStatusIdByXmlId($iblock_id, $xml_id) {
-        $property_enums = CIBlockPropertyEnum::GetList(Array("DEF"=>"DESC", "SORT"=>"ASC"), Array("IBLOCK_ID"=>$iblock_id, "XML_ID"=>$xml_id));
-        if($enum_fields = $property_enums->GetNext())
-        {
-            return $enum_fields["ID"];
+    /**
+     * Поулчение id статуса по его xml_id
+     * Запрос на полчение статусов выполняется 1 раз, при повторном обращении используются уже полученные данные
+     * @param $xml_id
+     * @return array
+     * @throws Exception
+     */
+    public function getReportStatusIdByXmlId($xml_id)
+    {
+        if (empty($this->reportStatuses)) {
+            $this->initReportStatuses();
+        }
+
+        if ($this->reportStatuses[$xml_id]) {
+            return $this->reportStatuses[$xml_id];
         } else {
-            throw new \Exception('Ошибка определения кода свойства');
+            throw new \Exception('Статус не найден');
+        }
+    }
+
+    /**
+     * Запрос на заполнение массива статусов продажи
+     */
+    private function initReportStatuses()
+    {
+        $property_enums = CIBlockPropertyEnum::GetList(Array("DEF" => "DESC", "SORT" => "ASC"), Array("IBLOCK_ID" => $this->REPORT_IBLOCK_ID, "CODE" => "STATUS"));
+        while ($enum_fields = $property_enums->GetNext()) {
+            $this->reportStatuses[$enum_fields['XML_ID']] = $enum_fields['ID'];
         }
     }
 }

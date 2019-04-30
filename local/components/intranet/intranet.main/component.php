@@ -453,15 +453,18 @@ class IntranetComp
 			$arFields['USER']		= Intranet::getInstance()->GetUserArr($arFields['PROPERTIES']['USER_ID']['VALUE']);
 			
 			$report_ar				= $arFields;
-			
-			
-			$adopted_value	= 4;
-			if(isset($_REQUEST['repel']) && $_REQUEST['repel'] == 1)
-				$adopted_value = 5;
-			
-			CIBlockElement::SetPropertyValues($arFields['ID'], Intranet::getInstance()->REPORT_IBLOCK_ID, $adopted_value, 'ADOPTED');
-			CIBlockElement::SetPropertyValues($arFields['ID'], Intranet::getInstance()->REPORT_IBLOCK_ID, $USER->GetID(), 'ADOPTED_USER');
-			CIBlockElement::SetPropertyValues($arFields['ID'], Intranet::getInstance()->REPORT_IBLOCK_ID, date($DB->DateFormatToPHP(CLang::GetDateFormat("SHORT"))), 'ADOPTED_DATE');
+
+            $adopted_value	= Intranet::getInstance()->getReportStatusIdByXmlId("ACCEPTED");
+            if(isset($_REQUEST['repel']) && $_REQUEST['repel'] == 1)
+                $adopted_value = Intranet::getInstance()->getReportStatusIdByXmlId("REJECTED");
+
+            $updatedProps = [
+                'STATUS' => $adopted_value,
+                'ADOPTED_USER' => $USER->GetID(),
+                'ADOPTED_DATE' => date($DB->DateFormatToPHP(CLang::GetDateFormat("SHORT")))
+            ];
+
+            CIBlockElement::SetPropertyValuesEx($arFields['ID'], Intranet::getInstance()->REPORT_IBLOCK_ID, $updatedProps);
 		}
 		else
 		{
@@ -494,18 +497,21 @@ class IntranetComp
 		
 		if(!isset($_REQUEST['FIELDS']['REPORT_ID']) || !is_array($_REQUEST['FIELDS']['REPORT_ID']) || sizeof($_REQUEST['FIELDS']['REPORT_ID']) <= 0)
 		{
-			$arResult['ERRORS'][] = 'Не выбрано ни одного продажи';
+			$arResult['ERRORS'][] = 'Не выбрано ни одной продажи';
 			return $arResult;
 		}
 		else
 			$reports_to_adopted	= $_REQUEST['FIELDS']['REPORT_ID'];
-		
-//	dump($_REQUEST['FIELDS']['REPORT_ID']);
-//	exit();
+
+
 		$i					= 0;
 		$report_ar			= array();
 		$arSelect 			= Array("ID", "IBLOCK_ID", "NAME", "PROPERTY_USER_ID", "PROPERTY_ADOPTED");
-		$arFilter 			= Array("IBLOCK_ID" => Intranet::getInstance()->REPORT_IBLOCK_ID, "PROPERTY_ADOPTED" => false, "ID" => $reports_to_adopted);
+		$arFilter 			= Array(
+		    "IBLOCK_ID" => Intranet::getInstance()->REPORT_IBLOCK_ID,
+            "PROPERTY_STATUS" => Intranet::getInstance()->getReportStatusIdByXmlId("AWAITING"),
+            "ID" => $reports_to_adopted
+        );
 		$res 				= CIBlockElement::GetList(Array('PROPERTY_WEEK' => 'DESC'), $arFilter, false, Array("nTopCount"=>100), $arSelect);
 		while($ob = $res->GetNextElement())
 		{
@@ -514,14 +520,18 @@ class IntranetComp
 //			$arFields['PROPERTIES']	= $ob->GetProperties();
 //			$arFields['USER']		= Intranet::getInstance()->GetUserArr($arFields['PROPERTIES']['USER_ID']['VALUE']);			
 			$report_ar				= $arFields;
-			
-			$adopted_value	= 4;
+
+			$adopted_value	= Intranet::getInstance()->getReportStatusIdByXmlId("ACCEPTED");
 			if(isset($_REQUEST['repel']) && $_REQUEST['repel'] == 1)
-				$adopted_value = 5;
-			
-			CIBlockElement::SetPropertyValues($arFields['ID'], Intranet::getInstance()->REPORT_IBLOCK_ID, $adopted_value, 'ADOPTED');
-			CIBlockElement::SetPropertyValues($arFields['ID'], Intranet::getInstance()->REPORT_IBLOCK_ID, $USER->GetID(), 'ADOPTED_USER');
-			CIBlockElement::SetPropertyValues($arFields['ID'], Intranet::getInstance()->REPORT_IBLOCK_ID, date($DB->DateFormatToPHP(CLang::GetDateFormat("SHORT"))), 'ADOPTED_DATE');
+				$adopted_value = Intranet::getInstance()->getReportStatusIdByXmlId("REJECTED");
+
+			$updatedProps = [
+			    'STATUS' => $adopted_value,
+                'ADOPTED_USER' => $USER->GetID(),
+                'ADOPTED_DATE' => date($DB->DateFormatToPHP(CLang::GetDateFormat("SHORT")))
+            ];
+
+            CIBlockElement::SetPropertyValuesEx($arFields['ID'], Intranet::getInstance()->REPORT_IBLOCK_ID, $updatedProps);
 			
 			$i++;
 		}
@@ -700,8 +710,7 @@ if($access_level < 100)
 		$arResult['USERS']	= $users;
 		
 		$cities				= Intranet::getInstance()->GetCityShopList();
-		$arResult['CITIES']	= $cities;	
-
+		$arResult['CITIES']	= $cities;
 
         //Получение отчетных периодов
         $arSelect = Array("ID", "NAME", "ACTIVE_FROM", "ACTIVE_TO", "PROPERTY_BONUS_DAYS");
@@ -739,7 +748,7 @@ if($access_level < 100)
 		}
 
 		$reports			= array();
-		$arSelect 			= Array("ID", "IBLOCK_ID", "NAME", "PROPERTY_USER_ID");
+		$arSelect 			= Array("ID", "IBLOCK_ID", "NAME", "PROPERTY_USER_ID", "PROPERTY_PERIOD_ID.NAME");
 		$arFilter 			= Array("IBLOCK_ID" => Intranet::getInstance()->REPORT_IBLOCK_ID);
 		$arFilter			= array_merge($arFilter, $arResult['FILTERS']);
 
@@ -1291,7 +1300,7 @@ if($access_level < 100)
 				{
 					if($PRODUCT_ID = $el->Add($arLoadProductArray))
 					{
-                        $statusId = Intranet::getStatusIdByXmlId(Intranet::getInstance()->REPORT_IBLOCK_ID,"S1");
+                        $statusId = Intranet::getReportStatusIdByXmlId(Intranet::getInstance()->REPORT_IBLOCK_ID,"AWAITING");
                         CIBlockElement::SetPropertyValuesEx($PRODUCT_ID, Intranet::getInstance()->REPORT_IBLOCK_ID, array("STATUS" => $statusId));
 
 						echo "New ID: ".$PRODUCT_ID;

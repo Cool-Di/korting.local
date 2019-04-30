@@ -1,17 +1,8 @@
 <? if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true) die();  ?>
-<?//=date('n', strtotime(date('Y').'W'.'40'));?>
+
 <h3>Список продаж</h3>
 <br/>
 <form class="form-inline reports_form" role="form">
-	<?/*<div class="form-group">
-		<label class="" for="FILTERS[PROPERTY_CITY_ID]">Месяц</label>
-		<select name="FILTERS[PROPERTY_MONTH]" class="form-control">
-			<option value="">-</option>
-			<? foreach($arResult['YEAR_MONTH'] as $year_month) { ?>
-				<option value="<?=$year_month['YEAR']?>.<?=$year_month['MONTH']?>" <?=($year_month['MONTH'] == $arResult['FILTERS']['PROPERTY_MONTH'] && $year_month['YEAR'] == $arResult['FILTERS']['PROPERTY_YEAR'] ? 'selected="selected"' : '')?>><?=$year_month['YEAR']?> <?=Intranet::getInstance()->GetMonthName($year_month['MONTH'])?></option>
-			<? } ?>
-		</select>
-	</div>*/?>
     <div class="form-group">
         <label class="" for="FILTERS[PROPERTY_PERIOD_ID]">Период</label>
         <select name="FILTERS[PROPERTY_PERIOD_ID]" class="form-control">
@@ -84,11 +75,11 @@
 	  <tr>
 	    <th>Город / Магазин</th>
 	    <th>Менеджер</th>
-	    <th>Месяц</th>
+	    <th>Период</th>
 	    <th width="100">Дата</th>
 	    <th>Товары</th>
-	    <th>Сумма</th>
-	    <th>Принят</th>
+	    <th>Баллы</th>
+	    <th>Подтвердить</th>
 	    <th></th>
 	  </tr>
 	</thead>
@@ -112,9 +103,8 @@
 	  <tr>
 	    <td><?=$report['PROPERTIES']['CITY']['VALUE']?> /<br/><?=$report['PROPERTIES']['SHOP']['VALUE']?></td>
 	    <td><?=$report['PROPERTIES']['FIO']['VALUE']?></td>
-	    <? /*<td><?=$report['PROPERTIES']['WEEK']['VALUE']?></td>*/?>
-	    <td><?=Intranet::getInstance()->GetMonthName($report['PROPERTIES']['MONTH']['VALUE'])?></td>
-	    <td><?=getDaysFromWeekMonth($report['PROPERTIES']['WEEK']['VALUE'], $report['PROPERTIES']['MONTH']['VALUE'], $report['PROPERTIES']['YEAR']['VALUE']);?></td>
+	    <td><?=$report['PROPERTY_PERIOD_ID_NAME']?></td>
+	    <td><?=$report['PROPERTIES']['SALE_DATE']['VALUE']?></td>
 	    <td class="products">
 	    	<? 
 	    	if(is_array($products))
@@ -128,12 +118,12 @@
 			}
 			?>
 	    </td>
-	    <td class="price"><?=number_format($report['PROPERTIES']['PRICE']['VALUE'], 0, ',', ' ');?> руб</td>
+	    <td class="price"><?=number_format($report['PROPERTIES']['PRICE']['VALUE'], 0, ',', ' ');?></td>
 	    <td>
-	    	<? if(empty($report['PROPERTIES']['ADOPTED']['VALUE'])) { ?> 
+	    	<? if($report['PROPERTIES']['STATUS']['VALUE_XML_ID'] == 'AWAITING') { ?>
 		    	<input type="checkbox" name="FIELDS[REPORT_ID][]" value="<?=$report['ID']?>">
 	    	<? } else { ?>
-		    	<?=$report['PROPERTIES']['ADOPTED']['VALUE']?>
+		    	<?=$report['PROPERTIES']['STATUS']['VALUE']?>
 	    	<? } ?>
 	    	
 	    </td>
