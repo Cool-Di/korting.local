@@ -701,24 +701,7 @@ if($access_level < 100)
 		
 		$cities				= Intranet::getInstance()->GetCityShopList();
 		$arResult['CITIES']	= $cities;	
-		
-		$yaer_month			= array();
-		$arSelect 			= Array("ID", "IBLOCK_ID", "NAME", "PROPERTY_USER_ID", 'PROPERTY_PERIOD_ID');
-		$arFilter 			= Array("IBLOCK_ID" => Intranet::getInstance()->REPORT_IBLOCK_ID);
-		$res 				= CIBlockElement::GetList(false, $arFilter, array('PROPERTY_YEAR', 'PROPERTY_MONTH'), Array("nTopCount"=>300), $arSelect);
-		while($ob = $res->GetNextElement())
-		{
-			$arFields 		= $ob->GetFields();
-			
-			$tmp_year_month = array(
-								'YEAR' => $arFields['PROPERTY_YEAR_VALUE'],
-								'MONTH' => $arFields['PROPERTY_MONTH_VALUE'],
-								'MONTH_NAME' => Intranet::getInstance()->GetMonthName($arFields['PROPERTY_MONTH_VALUE']),
-							);
-			//$yaer_month[$arFields['PROPERTY_YEAR_VALUE'].'.'.$arFields['PROPERTY_MONTH_VALUE']]	= $tmp_year_month;
-		}
-		//krsort($yaer_month);
-		//$arResult['YEAR_MONTH']	= $yaer_month;
+
 
         //Получение отчетных периодов
         $arSelect = Array("ID", "NAME", "ACTIVE_FROM", "ACTIVE_TO", "PROPERTY_BONUS_DAYS");
@@ -759,8 +742,7 @@ if($access_level < 100)
 		$arSelect 			= Array("ID", "IBLOCK_ID", "NAME", "PROPERTY_USER_ID");
 		$arFilter 			= Array("IBLOCK_ID" => Intranet::getInstance()->REPORT_IBLOCK_ID);
 		$arFilter			= array_merge($arFilter, $arResult['FILTERS']);
-		
-		//dump($arFilter);
+
 		$res 				= CIBlockElement::GetList(Array('PROPERTY_YEAR' => 'DESC', 'PROPERTY_MONTH' => 'DESC', 'PROPERTY_WEEK' => 'DESC', 'ID' => 'DESC'), $arFilter, false, Array("nTopCount"=>300), $arSelect);
 		while($ob = $res->GetNextElement())
 		{

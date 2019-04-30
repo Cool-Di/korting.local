@@ -34,7 +34,7 @@
 ?>
   <tr>
     <td><?=$report['PROPERTY_PERIOD_ID_NAME'];?></td>
-    <td><?=$report['ACTIVE_FROM'];?></td>
+    <td><?=$report['PROPERTIES']['SALE_DATE']['VALUE']?></td>
     <td class="products">
     	<? 
     	if(is_array($products))
@@ -51,10 +51,9 @@
     <td><?=$product_count?> шт.</td>
 	<td class="price"><?=number_format($report['PROPERTIES']['PRICE']['VALUE'], 0, ',', ' ');?></td>
     <td><?=$report['PROPERTIES']['STATUS']['VALUE']?></td>
-    <td><a href="/intranet?action=report_detail_user&report_id=<?=$report['ID']?>" class="btn btn-default btn-success"><span class="glyphicon glyphicon-search"></span></a></td>
+    <td><a href="/intranet?action=report_detail_user&report_id=<?=$report['ID']?>" class="btn btn-default btn-success"><span class="glyphicon glyphicon-pencil"></span></a></td>
   </tr>
 <? } ?>
 
 </tbody>
 </table>
-	

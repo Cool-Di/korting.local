@@ -312,14 +312,14 @@ function add_offer_show_select($sections, $active_section = '',  $level = '')
 	<div class="form-group">
 		<label for="inputEmail3" class="col-sm-3 control-label">
 			Комментарий для менеджера
-			<span class="help-block h6"> (все устраивает, хорошо работает менеджер, слишком много товара, высокая проходимость и тп.)</span>
+			<?/*<span class="help-block h6"> (все устраивает, хорошо работает менеджер, слишком много товара, высокая проходимость и тп.)</span>*/?>
 		</label>
 		<div class="col-sm-5">
 			<textarea class="form-control" name="FIELDS[COMMENT]" rows="3"><?=$arResult['FIELDS']['COMMENT']?></textarea>
 		</div>
 	</div>
 	
-	<div class="form-group">
+	<?/*<div class="form-group">
 		<label for="inputEmail3" class="col-sm-3 control-label">
 			Маркетинговые активности
 			<span class="help-block h6"> (акции, ценовые предложения конкурентов)</span>
@@ -327,7 +327,7 @@ function add_offer_show_select($sections, $active_section = '',  $level = '')
 		<div class="col-sm-5">
 			<textarea class="form-control" name="FIELDS[MARKETING]" rows="3"><?=$arResult['FIELDS']['MARKETING']?></textarea>
 		</div>
-	</div>
+	</div>*/?>
 	<div class="form-group">
 		<div class="col-sm-offset-3 col-sm-10">
 		  <button type="submit" class="btn btn-default btn-primary">Отправить</button>
