@@ -14,6 +14,11 @@ ini_set('display_startup_errors',1);
 
 include_once('intranet.php');
 
+#
+# AutoLoader
+#
+require_once($_SERVER['DOCUMENT_ROOT'].'/local/php_interface/lib/loader.php');
+
 class Korting
 {	
 	//Здесь хранится экземпляр класса
