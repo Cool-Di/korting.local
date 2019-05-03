@@ -89,16 +89,23 @@
 			<td><?=$arResult['REPORT']['PROPERTIES']['COMMENT']['VALUE']?></td>
 		</tr>
 		<tr>
-			<td><strong>Принят</strong></td>
+			<td><strong>Статус</strong></td>
 			<td>
-				<strong><?=$arResult['REPORT']['PROPERTIES']['ADOPTED']['VALUE']?> </strong>
-				<?
-				if(isset($arResult['REPORT']['PROPERTIES']['ADOPTED_USER']['VALUE']) && $arResult['REPORT']['PROPERTIES']['ADOPTED_USER']['VALUE'] != '')
-				{
-					$adopted_user = Intranet::getInstance()->GetUserArr($arResult['REPORT']['PROPERTIES']['ADOPTED_USER']['VALUE']);
-				?>
-					(дата - <strong><?=$arResult['REPORT']['PROPERTIES']['ADOPTED_DATE']['VALUE']?></strong>, )
-				<? } ?>
+                <strong><?=$arResult['REPORT']['PROPERTIES']['STATUS']['VALUE']?> </strong>
+                <?
+                if($arResult['REPORT']['PROPERTIES']['STATUS']['VALUE_XML_ID'] != 'AWAITING')
+                {
+                    $adopted_user = Intranet::getInstance()->GetUserArr($arResult['REPORT']['PROPERTIES']['ADOPTED_USER']['VALUE']);
+                    ?>
+                    (дата - <strong><?=$arResult['REPORT']['PROPERTIES']['ADOPTED_DATE']['VALUE']?></strong>,
+                                                                                                            пользователем - <strong><?=$adopted_user['FIO']?></strong> (<?=$arResult['REPORT']['PROPERTIES']['ADOPTED_USER']['VALUE']?>))
+
+                    <? if(strlen($arResult['REPORT']['PROPERTIES']['ADOPTED_REASON']['VALUE']) > 0) {?>
+                    <div>
+                        <strong>Причина отказа: </strong> <?=$arResult['REPORT']['PROPERTIES']['ADOPTED_REASON']['VALUE']?>
+                    </div>
+                <?}?>
+                <?}?>
 			</td>
 		</tr>
         <? if(!empty($arResult["FILES"])){?>

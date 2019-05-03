@@ -3,7 +3,7 @@
  * Компонент с таблицей наград за бонусы
  */
 
-use IT\Intranet\Models\Bonus;
+use IT\Intranet\Models\BonusEntity;
 
 class BonusListComponent extends CBitrixComponent
 {
@@ -18,7 +18,7 @@ class BonusListComponent extends CBitrixComponent
      */
     public function executeComponent()
     {
-        $obBonus =  new Bonus();
+        $obBonus =  new BonusEntity();
         $hlBonus = $obBonus->getEntity();
 
         $bonusTable = $hlBonus::getList([

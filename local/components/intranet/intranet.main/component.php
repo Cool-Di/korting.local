@@ -111,10 +111,16 @@ class IntranetComp
 					$this->templatePage	= 'reports_by_month';
 				break;
 				case 'report_detail':
-					$APPLICATION->AddChainItem("Продажи", "/intranet/reports/");
-					$APPLICATION->AddChainItem("Просмотр продажи");
-					$component->arResult	= $this->ReportDetailPage();
-					$this->templatePage	= 'report_detail';
+				    //хак, post от форму с другим url почему то приходит пусты, поэтому добавлен secondary_action для вызова AdoptedReport
+				    if($_REQUEST['secondary_action']) {
+                        $component->arResult	= $this->AdoptedReport();
+                        $this->templatePage		= 'report_detail';
+                    } else {
+                        $APPLICATION->AddChainItem("Продажи", "/intranet/reports/");
+                        $APPLICATION->AddChainItem("Просмотр продажи");
+                        $component->arResult = $this->ReportDetailPage();
+                        $this->templatePage = 'report_detail';
+                    }
 				break;
 				case 'report_detail_user':
 					$APPLICATION->AddChainItem("Продажи", "/intranet/reports/");
@@ -122,9 +128,9 @@ class IntranetComp
 					$component->arResult	= $this->ReportDetailUserPage();
 					$this->templatePage	= 'report_detail_user';
 				break;
-				case 'adopted_report':
+				/*case 'adopted_report':
 					$component->arResult	= $this->AdoptedReport();
-					$this->templatePage		= 'report_detail';
+					$this->templatePage		= 'report_detail';*/
 				break;
 				case 'adopted_all_report':
 					$component->arResult	= $this->AdoptedAllReport();
@@ -439,7 +445,7 @@ class IntranetComp
 		{
 			$arResult['ERRORS'][] = 'Не задан ID продажи';
 			return $arResult;
-		}	
+		}
 		
 		$report_ar			= array();
 		$arSelect 			= Array("ID", "IBLOCK_ID", "NAME", "PROPERTY_USER_ID");
@@ -455,13 +461,17 @@ class IntranetComp
 			$report_ar				= $arFields;
 
             $adopted_value	= Intranet::getInstance()->getReportStatusIdByXmlId("ACCEPTED");
-            if(isset($_REQUEST['repel']) && $_REQUEST['repel'] == 1)
+            $adopted_reason = '';
+            if(isset($_REQUEST['repel']) && $_REQUEST['repel'] == 1) {
                 $adopted_value = Intranet::getInstance()->getReportStatusIdByXmlId("REJECTED");
+                $adopted_reason = $_REQUEST['reason'];
+            }
 
             $updatedProps = [
                 'STATUS' => $adopted_value,
                 'ADOPTED_USER' => $USER->GetID(),
-                'ADOPTED_DATE' => date($DB->DateFormatToPHP(CLang::GetDateFormat("SHORT")))
+                'ADOPTED_DATE' => date($DB->DateFormatToPHP(CLang::GetDateFormat("SHORT"))),
+                'ADOPTED_REASON' => $adopted_reason
             ];
 
             CIBlockElement::SetPropertyValuesEx($arFields['ID'], Intranet::getInstance()->REPORT_IBLOCK_ID, $updatedProps);
@@ -626,7 +636,7 @@ if($access_level < 100)
 	public function ReportDetailPage()
 	{
 		global $USER;
-		
+
 		$arResult			= array();
 		$arResult['ERRORS']	= array();
 		
@@ -1300,7 +1310,7 @@ if($access_level < 100)
 				{
 					if($PRODUCT_ID = $el->Add($arLoadProductArray))
 					{
-                        $statusId = Intranet::getReportStatusIdByXmlId(Intranet::getInstance()->REPORT_IBLOCK_ID,"AWAITING");
+                        $statusId = Intranet::getInstance()->getReportStatusIdByXmlId("AWAITING");
                         CIBlockElement::SetPropertyValuesEx($PRODUCT_ID, Intranet::getInstance()->REPORT_IBLOCK_ID, array("STATUS" => $statusId));
 
 						echo "New ID: ".$PRODUCT_ID;

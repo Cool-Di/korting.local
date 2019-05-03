@@ -24,8 +24,9 @@
 	               false);
 				?>
 				<?
-					$month_sale	= Intranet::getInstance()->GetMonthSale(date('n'), date('Y'));
-					$sale_plan	= Intranet::getInstance()->GetUserSalePlan();
+					//$month_sale	= Intranet::getInstance()->GetMonthSale(date('n'), date('Y'));
+					//$sale_plan	= Intranet::getInstance()->GetUserSalePlan();
+
 				?>
 	 			<br/>
 	 			<br/>
@@ -33,15 +34,22 @@
 	 					&& !CSite::InDir(SITE_DIR.'intranet/statistics/')
 	 					&& !CSite::InDir(SITE_DIR.'intranet/plans/')
 	 					&& !CSite::InDir(SITE_DIR.'intranet/reports/')
-	 					) { ?> 
+	 					) { ?>
+                    <?
+                        $currentBonus = new \IT\Intranet\Applications\CurrentBonus();
+                        //$monthSale = \IT\Intranet\Applications\Bonus::getMonthSale();
+                        //debugmessage($monthSale);
+                    ?>
 		 			<?/*<p class="text-primary h3">План на текущий месяц</p>
 		 			<p class="h4"><?=number_format($sale_plan, 0, ',', ' ');?> руб</p>
 		 			<hr>*/?>
 		 			<p class="text-primary h3">Подтверждено</p>
-		 			<p class="h4"><?=number_format($month_sale['adopted'], 2, ',', ' ');?> руб</p>
+		 			<p class="h4">
+                        баллов: <?=$currentBonus->getAccepted()?> (<?=$currentBonus->getReward()?> руб.)
+                    </p>
 		 			<hr>
 		 			<p class="text-primary h3">Ожидает подтверждения</p>
-		 			<p class="h4"><?=number_format($month_sale['unadopted'], 2, ',', ' ');?> руб</p>
+		 			<p class="h4">баллов: <?=$currentBonus->getAwaiting()?></p>
 	 			<? } ?>
  			<? } ?>
         </div><!--/span-->

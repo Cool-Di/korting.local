@@ -28,6 +28,11 @@ class Intranet
      * @var array
      */
 	private $reportStatuses = [];
+
+	/*
+	 * ID текущего периода, который определяется по текущей дате
+	 */
+	private $currentPeriodId;
 	
 	public static function getInstance()
 	{
@@ -370,6 +375,25 @@ class Intranet
         $property_enums = CIBlockPropertyEnum::GetList(Array("DEF" => "DESC", "SORT" => "ASC"), Array("IBLOCK_ID" => $this->REPORT_IBLOCK_ID, "CODE" => "STATUS"));
         while ($enum_fields = $property_enums->GetNext()) {
             $this->reportStatuses[$enum_fields['XML_ID']] = $enum_fields['ID'];
+        }
+    }
+
+    public function getCurrentPeriodId() {
+        if($this->currentPeriodId) {
+            return $this->currentPeriodId;
+        } else {
+            $arSelect = Array("ID", "NAME", "ACTIVE_FROM", "ACTIVE_TO", "PROPERTY_LAST_DAY");
+            $arFilter = Array(
+                "IBLOCK_ID" => Intranet::getInstance()->PERIOD_IBLOCK_ID,
+                "ACTIVE_DATE" => "Y",
+            );
+            $res = CIBlockElement::GetList(Array(), $arFilter, false, false, $arSelect);
+            if ($period = $res->Fetch()) {
+                $this->currentPeriodId = $period['ID'];
+            } else {
+                throw new \Exception('В БД не заведён отчетный период, соответстующий текущей дате');
+            }
+            return $this->currentPeriodId;
         }
     }
 }
