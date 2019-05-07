@@ -13,7 +13,7 @@ $this->addExternalJS("/local/components/intranet/intranet.main/templates/.defaul
 	<br/>
 <? } ?>
 <form method="post" action='<?=POST_FORM_ACTION_URI?>' id="reportForm" name="reportForm" enctype="multipart/form-data">
-    <input type="hidden" name="repel" value="1" />
+    <input type="hidden" name="repel" value="0" />
     <input type="hidden" name="secondary_action" value="adopted_report" />
     <div class="report_detail">
         <table class="table table-bordered table-striped">

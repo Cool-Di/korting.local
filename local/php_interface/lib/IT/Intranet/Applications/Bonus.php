@@ -63,9 +63,10 @@ class Bonus
             if($points >= $bonus['UF_POINTS']) {
                 $reward = $bonus['UF_REWARD'];
                 $balance = $points - $bonus['UF_POINTS'];
+                $usedPoints = $bonus['UF_POINTS'];
             }
         }
 
-        return ['reward' => $reward, 'balance' => $balance];
+        return ['reward' => $reward, 'balance' => $balance, 'usedPoints' => $usedPoints];
     }
 }

@@ -84,10 +84,7 @@
 	  </tr>
 	</thead>
 	<tbody>
-	<? foreach($arResult['REPORTS'] as $report) {// dump($report['PROPERTIES']);
-		$week_number	= explode('.', $report['PROPERTIES']['WEEK']['VALUE']);
-		$week_number	= $week_number[1];
-		
+	<? foreach($arResult['REPORTS'] as $report) {
 		$products		= unserialize($report['PROPERTIES']['PRODUCTS']['~VALUE']);
 	//	dump($products);
 		$product_count	= 0;
@@ -100,35 +97,48 @@
 			}
 		}
 	?>
-	  <tr>
-	    <td><?=$report['PROPERTIES']['CITY']['VALUE']?> /<br/><?=$report['PROPERTIES']['SHOP']['VALUE']?></td>
-	    <td><?=$report['PROPERTIES']['FIO']['VALUE']?></td>
-	    <td><?=$report['PROPERTY_PERIOD_ID_NAME']?></td>
-	    <td><?=$report['PROPERTIES']['SALE_DATE']['VALUE']?></td>
-	    <td class="products">
-	    	<? 
-	    	if(is_array($products))
-			{
-				foreach($products as $product)
-				{
-				?>
-				<?=$product['CATEGORY_NAME']?> <?=$product['NAME']?> - <?=$product['COUNT']?>шт.<br/>
-				<?
-				}
-			}
-			?>
-	    </td>
-	    <td class="price"><?=number_format($report['PROPERTIES']['PRICE']['VALUE'], 0, ',', ' ');?></td>
-	    <td>
-	    	<? if($report['PROPERTIES']['STATUS']['VALUE_XML_ID'] == 'AWAITING') { ?>
-		    	<input type="checkbox" name="FIELDS[REPORT_ID][]" value="<?=$report['ID']?>">
-	    	<? } else { ?>
-		    	<?=$report['PROPERTIES']['STATUS']['VALUE']?>
-	    	<? } ?>
-	    	
-	    </td>
-	    <td><a href="/intranet/reports?action=report_detail&report_id=<?=$report['ID']?>" class="btn btn-default btn-success"><span class="glyphicon glyphicon-search"></span></a></td>
-	  </tr>
+        <? if($report['PROPERTIES']['IS_SYSTEM']['VALUE']) {?>
+            <tr>
+                <td></td>
+                <td></td>
+                <td><?=$report['PROPERTY_PERIOD_ID_NAME']?></td>
+                <td></td>
+                <td class="products"><?=$report['NAME']?> (ID <?=$report['ID']?>)</td>
+                <td class="price"><?=$report['PROPERTIES']['PRICE']['VALUE'];?></td>
+                <td><?=$report['PROPERTIES']['STATUS']['VALUE']?></td>
+                <td></td>
+            </tr>
+        <?} else {?>
+          <tr>
+            <td><?=$report['PROPERTIES']['CITY']['VALUE']?> /<br/><?=$report['PROPERTIES']['SHOP']['VALUE']?> </td>
+            <td><?=$report['PROPERTIES']['FIO']['VALUE']?></td>
+            <td><?=$report['PROPERTY_PERIOD_ID_NAME']?></td>
+            <td><?=$report['PROPERTIES']['SALE_DATE']['VALUE']?></td>
+            <td class="products">
+                <?
+                if(is_array($products))
+                {
+                    foreach($products as $product)
+                    {
+                    ?>
+                    <?=$product['CATEGORY_NAME']?> <?=$product['NAME']?> - <?=$product['COUNT']?>шт.<br/>
+                    <?
+                    }
+                }
+                ?>
+            </td>
+            <td class="price"><?=$report['PROPERTIES']['PRICE']['VALUE'];?></td>
+            <td>
+                <? if($report['PROPERTIES']['STATUS']['VALUE_XML_ID'] == 'AWAITING') { ?>
+                    <input type="checkbox" name="FIELDS[REPORT_ID][]" value="<?=$report['ID']?>">
+                <? } else { ?>
+                    <?=$report['PROPERTIES']['STATUS']['VALUE']?>
+                <? } ?>
+
+            </td>
+            <td><a href="/intranet/reports?action=report_detail&report_id=<?=$report['ID']?>" class="btn btn-default btn-success"><span class="glyphicon glyphicon-search"></span></a></td>
+          </tr>
+        <?}?>
 	<? } ?>
 	<tr>
 		<td colspan="6">
@@ -153,4 +163,31 @@
 	</div>
 
 </form>
-	
+<? if($arResult['IS_USER_PERIOD_PAGE']) {?>
+    <form method="post">
+        <table class="table table_bonus" style="width: 400px;">
+            <tbody>
+            <tr>
+                <td class="title_bonus">Баллов подтвреждено:</td>
+                <td class="price_bonus"><?=$arResult['CURRENT_BONUS']['accepted']?></td>
+            </tr>
+            <tr>
+                <td class="title_bonus">Будет списано:</td>
+                <td class="price_bonus"><?=(int)$arResult['CURRENT_BONUS']['usedPoints']?> (<?=$arResult['CURRENT_BONUS']['reward']?> руб.)</td>
+            </tr>
+            <tr>
+                <td class="title_bonus">Баллов осталось:</td>
+                <td class="price_bonus"><?=(int)$arResult['CURRENT_BONUS']['balance']?></td>
+            </tr>
+            </tbody>
+        </table>
+        <? if($arResult["EXIST_TRANSFER"]) {?>
+            Период уже закрыт
+        <?} elseif($arResult["HAVE_AWAITING"]){?>
+            Нельзя списать баллы, пока есть необработанные отчёты
+        <?} else {?>
+            <input type="hidden" name="transferBonus" value="1">
+            <button class="btn btn-default btn-success">Записать баллы на счёт</button>
+        <?}?>
+    </form>
+<?}?>

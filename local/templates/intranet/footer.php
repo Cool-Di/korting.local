@@ -37,8 +37,8 @@
 	 					) { ?>
                     <?
                         $currentBonus = new \IT\Intranet\Applications\CurrentBonus();
-                        //$monthSale = \IT\Intranet\Applications\Bonus::getMonthSale();
-                        //debugmessage($monthSale);
+
+                        $userMoney = new \IT\Intranet\Applications\UserMoney();
                     ?>
 		 			<?/*<p class="text-primary h3">План на текущий месяц</p>
 		 			<p class="h4"><?=number_format($sale_plan, 0, ',', ' ');?> руб</p>
@@ -50,6 +50,10 @@
 		 			<hr>
 		 			<p class="text-primary h3">Ожидает подтверждения</p>
 		 			<p class="h4">баллов: <?=$currentBonus->getAwaiting()?></p>
+                    <hr>
+                    <p class="text-primary h3">Доступно для снятия</p>
+                    <p class="h4"><?=$userMoney->getBalance()?> руб</p>
+
 	 			<? } ?>
  			<? } ?>
         </div><!--/span-->

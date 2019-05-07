@@ -18,8 +18,6 @@
 </thead>
 <tbody>
 <? foreach($arResult['REPORTS'] as $report) {// dump($report['PROPERTIES']);
-	$week_number	= explode('.', $report['PROPERTIES']['WEEK']['VALUE']);
-	$week_number	= $week_number[1];
 	
 	$products		= unserialize($report['PROPERTIES']['PRODUCTS']['~VALUE']);
 	
@@ -32,27 +30,39 @@
 		}
 	}
 ?>
-  <tr>
-    <td><?=$report['PROPERTY_PERIOD_ID_NAME'];?></td>
-    <td><?=$report['PROPERTIES']['SALE_DATE']['VALUE']?></td>
-    <td class="products">
-    	<? 
-    	if(is_array($products))
-		{
-			foreach($products as $product)
-			{
-			?>
-			<?=$product['CATEGORY_NAME']?> <?=$product['NAME']?> - <?=$product['COUNT']?>шт.<br/>
-			<?
-			}
-		}
-		?>
-    </td>
-    <td><?=$product_count?> шт.</td>
-	<td class="price"><?=number_format($report['PROPERTIES']['PRICE']['VALUE'], 0, ',', ' ');?></td>
-    <td><?=$report['PROPERTIES']['STATUS']['VALUE']?></td>
-    <td><a href="/intranet?action=report_detail_user&report_id=<?=$report['ID']?>" class="btn btn-default btn-success"><span class="glyphicon glyphicon-pencil"></span></a></td>
-  </tr>
+    <? if($report['PROPERTIES']['IS_SYSTEM']['VALUE']) {?>
+        <tr>
+            <td><?=$report['PROPERTY_PERIOD_ID_NAME'];?></td>
+            <td></td>
+            <td class="products"><?=$report['NAME']?> (ID <?=$report['ID']?>)</td>
+            <td></td>
+            <td class="price"><?=$report['PROPERTIES']['PRICE']['VALUE']?></td>
+            <td><?=$report['PROPERTIES']['STATUS']['VALUE']?></td>
+            <td></td>
+        </tr>
+    <?} else {?>
+        <tr>
+            <td><?=$report['PROPERTY_PERIOD_ID_NAME'];?></td>
+            <td><?=$report['PROPERTIES']['SALE_DATE']['VALUE']?></td>
+            <td class="products">
+                <?
+                if(is_array($products))
+                {
+                    foreach($products as $product)
+                    {
+                    ?>
+                    <?=$product['CATEGORY_NAME']?> <?=$product['NAME']?> - <?=$product['COUNT']?>шт.<br/>
+                    <?
+                    }
+                }
+                ?>
+            </td>
+            <td><?=$product_count?> шт.</td>
+            <td class="price"><?=$report['PROPERTIES']['PRICE']['VALUE']?></td>
+            <td><?=$report['PROPERTIES']['STATUS']['VALUE']?></td>
+           <td><a href="/intranet?action=report_detail_user&report_id=<?=$report['ID']?>" class="btn btn-default btn-success"><span class="glyphicon glyphicon-pencil"></span></a></td>
+        </tr>
+    <?}?>
 <? } ?>
 
 </tbody>

@@ -594,6 +594,9 @@ if($access_level < 100)
 			$arFields 				= $ob->GetFields();
 
 			$arFields['PROPERTIES']	= $ob->GetProperties();
+            if($arFields['PROPERTIES']['IS_SYSTEM']['VALUE']){
+                throw new \Exception('Эта запись недоступна для редактирования');
+            }
 			
 			$arFields['USER']		= Intranet::getInstance()->GetUserArr($arFields['PROPERTIES']['USER_ID']['VALUE']);
 			
@@ -669,6 +672,10 @@ if($access_level < 100)
 		{
 			$arFields 				= $ob->GetFields();
 			$arFields['PROPERTIES']	= $ob->GetProperties();
+
+			if($arFields['PROPERTIES']['IS_SYSTEM']['VALUE']){
+                throw new \Exception('Эта запись недоступна для редактирования');
+            }
 			
 			$arFields['USER']		= Intranet::getInstance()->GetUserArr($arFields['PROPERTIES']['USER_ID']['VALUE']);
 			
@@ -733,7 +740,6 @@ if($access_level < 100)
             $arResult['PERIODS'][$arFields['ID']] = $arFields;
         }
 		
-		
 		//Определение свойств по которым можно фильтровать
 		$filter_property		= array("PROPERTY_CITY_ID", "PROPERTY_SHOP_ID", "PROPERTY_USER_ID", "PROPERTY_PERIOD_ID");
 		$arResult['FILTERS']	= array();
@@ -742,7 +748,15 @@ if($access_level < 100)
 			if(isset($_REQUEST['FILTERS'][$fp]) && intval($_REQUEST['FILTERS'][$fp]))
 				$arResult['FILTERS'][$fp]	= intval($_REQUEST['FILTERS'][$fp]);
 		}
-		
+
+
+        $isUserPeriodPage = false;
+        //Если выбран фильтр только по юзеру и по периоду, то эта страница с отчётами пользователя за период
+        if($arResult['FILTERS']["PROPERTY_USER_ID"] && $arResult['FILTERS']["PROPERTY_PERIOD_ID"]
+            && !$arResult['FILTERS']["PROPERTY_CITY_ID"] && !$arResult['FILTERS']["PROPERTY_SHOP_ID"]) {
+            $isUserPeriodPage = true;
+        }
+
 		/*if(isset($_REQUEST['FILTERS']['PROPERTY_MONTH']) && $_REQUEST['FILTERS']['PROPERTY_MONTH'] != '')
 		{
 			$filter_yaer_month	= explode('.', $_REQUEST['FILTERS']['PROPERTY_MONTH']);
@@ -760,6 +774,9 @@ if($access_level < 100)
 		$reports			= array();
 		$arSelect 			= Array("ID", "IBLOCK_ID", "NAME", "PROPERTY_USER_ID", "PROPERTY_PERIOD_ID.NAME");
 		$arFilter 			= Array("IBLOCK_ID" => Intranet::getInstance()->REPORT_IBLOCK_ID);
+		if(!$isUserPeriodPage) {
+            $arFilter["PROPERTY_IS_SYSTEM"] = false;
+        }
 		$arFilter			= array_merge($arFilter, $arResult['FILTERS']);
 
 		$res 				= CIBlockElement::GetList(Array('PROPERTY_YEAR' => 'DESC', 'PROPERTY_MONTH' => 'DESC', 'PROPERTY_WEEK' => 'DESC', 'ID' => 'DESC'), $arFilter, false, Array("nTopCount"=>300), $arSelect);
@@ -767,14 +784,32 @@ if($access_level < 100)
 		{
 			$arFields 				= $ob->GetFields();
 			$arFields['PROPERTIES']	= $ob->GetProperties();
+
+			if($arFields['PROPERTIES']["STATUS"]["VALUE_XML_ID"] == "AWAITING") {
+                $arResult["HAVE_AWAITING"] = true;
+            }
 			
 			$arFields['USER']		= Intranet::getInstance()->GetUserArr($arFields['PROPERTIES']['USER_ID']['VALUE']);
 			
 			$reports[]				= $arFields;
 		}
 
-		$arResult['REPORTS']		= $reports;
-		
+        $arResult['REPORTS']		= $reports;
+
+		if($isUserPeriodPage && count($reports) > 0) {
+
+            $arResult['IS_USER_PERIOD_PAGE'] = $isUserPeriodPage;
+
+            $currentBonus = new \IT\Intranet\Applications\CurrentBonus($arResult['FILTERS']["PROPERTY_USER_ID"], $arResult['FILTERS']["PROPERTY_PERIOD_ID"]);
+            $arResult["CURRENT_BONUS"] = $currentBonus->toArray();
+            $arResult["EXIST_TRANSFER"] = $currentBonus->existTransfer();
+
+            //Команда на зачисление денег на счёт
+            if($_POST["transferBonus"] && !$arResult["HAVE_AWAITING"] && !$arResult["EXIST_TRANSFER"]) {
+                $currentBonus->transferBonus();
+                LocalRedirect($GLOBALS["APPLICATION"]->GetCurPageParam());
+            }
+        }
 		
 		return $arResult;
 	}
@@ -1059,7 +1094,7 @@ if($access_level < 100)
 		if(isset($_REQUEST['report_id']) && intval($_REQUEST['report_id']))
 			$report_id	= intval($_REQUEST['report_id']);
 
-		
+        $arOldReport = null;
 		if(intval($report_id))
 		{
 			$report_ar			= array();
@@ -1070,6 +1105,11 @@ if($access_level < 100)
 			{
 				$arFields 				= $ob->GetFields();
 				$arFields['PROPERTIES']	= $ob->GetProperties();
+                if($arFields['PROPERTIES']['IS_SYSTEM']['VALUE']){
+                    throw new \Exception('Эта запись недоступна для редактирования');
+                }
+
+				$arOldReport = $arFields;
 				
 				$arFields['USER']		= Intranet::getInstance()->GetUserArr($arFields['PROPERTIES']['USER_ID']['VALUE']);
 				
@@ -1086,6 +1126,7 @@ if($access_level < 100)
 					//$arResult['FIELDS']['REPORT_ID']	= $arResult['REPORT']['ID'];
 					$arResult['FIELDS']['COMMENT']		= $arResult['REPORT']['PROPERTIES']['COMMENT']['VALUE'];
 					$arResult['FIELDS']['MARKETING']	= $arResult['REPORT']['PROPERTIES']['MARKETING']['VALUE'];
+                    $arResult['FIELDS']['SALE_DATE']		= $arResult['REPORT']['PROPERTIES']['SALE_DATE']['VALUE'];
 					
 					$arResult['FIELDS']['REPORT_DATE']	= $arResult['REPORT']['PROPERTIES']['YEAR']['VALUE'].'.'.$arResult['REPORT']['PROPERTIES']['MONTH']['VALUE'].'.'.$arResult['REPORT']['PROPERTIES']['WEEK']['VALUE'];
 					
@@ -1262,9 +1303,16 @@ if($access_level < 100)
 				$PROP['MARKETING']		= $arResult['FIELDS']['MARKETING'];
                 $PROP['PERIOD_ID']		= $arResult['FIELDS']['PERIOD_ID'];
                 $PROP['SALE_DATE']		= $arResult['FIELDS']['SALE_DATE'];
-                $PROP['FILES']		    = $arResult['FIELDS']['FILES'];
+
 				
 				$PROP['PRODUCTS_TEXT'][0] = Array("VALUE" => Array ("TEXT" => $product_string, "TYPE" => "text"));
+
+				//Разный набор полей для добаления и редактирования отчёта
+                if(intval($report_id)) {
+                    $PROP['STATUS']  = $arOldReport['PROPERTIES']['STATUS']['VALUE_ENUM_ID'];
+                } else {
+                    $PROP['FILES']		= $arResult['FIELDS']['FILES'];
+                }
 				
 				//$PROP['MONTH']		= date('Y.m', strtotime(date('Y').'W'.$week));
 				//$PROP['WEEK']			= $arResult['REPORT_YEAR'].'.'.$arResult['WEEK_NUMBER'];

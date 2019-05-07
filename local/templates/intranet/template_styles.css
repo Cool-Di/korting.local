@@ -1158,3 +1158,12 @@ form.plan_filter div.form-group label {display: block;}
 	display: inline-block !important;
 	width: 92% !important;
 }
+
+.table_bonus .price_bonus {
+	text-align: left;
+}
+
+.table_bonus .title_bonus {
+	width: 50%;
+	text-align: right;
+}
