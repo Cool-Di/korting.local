@@ -179,6 +179,11 @@
                 <td class="title_bonus">Баллов осталось:</td>
                 <td class="price_bonus"><?=(int)$arResult['CURRENT_BONUS']['balance']?></td>
             </tr>
+            <tr>
+                <td colspan="2">
+                    <a href="/intranet/money/add_transfer.php?USER_ID=<?=$_REQUEST['FILTERS']['PROPERTY_USER_ID']?>">Перейти к денежным переводам пользователя</a>
+                </td>
+            </tr>
             </tbody>
         </table>
         <? if($arResult["EXIST_TRANSFER"]) {?>

@@ -204,7 +204,8 @@ class CurrentBonus
             'UF_MONEY' => $this->getReward(),
             'UF_USER_ID' => $this->getUserId(),
             'UF_PERIOD_ID' => $this->getPeriodId(),
-            'UF_DATE_ADDED' => new DateTime()
+            'UF_DATE_ADDED' => new DateTime(),
+            'UF_COMMENT' => 'Перепод баллов в деньги за период'
         ]);
         if (!$result->isSuccess()) {
             throw new \Exception('Ошибка добавления денежный трансфер в базу');

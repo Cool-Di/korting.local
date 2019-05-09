@@ -52,7 +52,9 @@
 		 			<p class="h4">баллов: <?=$currentBonus->getAwaiting()?></p>
                     <hr>
                     <p class="text-primary h3">Доступно для снятия</p>
-                    <p class="h4"><?=$userMoney->getBalance()?> руб</p>
+                    <p class="h4">
+                        <a href="/intranet/money/"><?=$userMoney->getBalance()?></a> руб.
+                    </p>
 
 	 			<? } ?>
  			<? } ?>
