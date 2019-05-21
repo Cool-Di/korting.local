@@ -31,9 +31,9 @@
 	}
 ?>
     <? if($report['PROPERTIES']['IS_SYSTEM']['VALUE']) {?>
-        <tr>
+        <tr class="system_row">
             <td><?=$report['PROPERTY_PERIOD_ID_NAME'];?></td>
-            <td></td>
+            <td><?=$report['PROPERTIES']['SALE_DATE']['VALUE']?></td>
             <td class="products"><?=$report['NAME']?> (ID <?=$report['ID']?>)</td>
             <td></td>
             <td class="price"><?=$report['PROPERTIES']['PRICE']['VALUE']?></td>

@@ -124,7 +124,7 @@
 </div>
 <div class="pull-left">
 	<a href="/intranet" class="btn btn-default btn-success"><span class="glyphicon glyphicon-arrow-left"></span> назад</a>
-	<? if($arResult['REPORT']['PROPERTIES']['ADOPTED']['VALUE'] != 'Да') { ?>
+	<? if($arResult['REPORT']['PROPERTIES']['STATUS']['VALUE_XML_ID'] != 'ACCEPTED') { ?>
 		<a href="/intranet?action=add_report&report_id=<?=$arResult['REPORT']['ID']?>" class="btn btn-default btn-primary"><span class="glyphicon glyphicon-edit"></span> редактировать</a>
 	<? } ?>
 </div>

@@ -36,17 +36,20 @@
 	 					&& !CSite::InDir(SITE_DIR.'intranet/reports/')
 	 					) { ?>
                     <?
+                        $currentPeriod = Intranet::getInstance()->getCurrentPeriod();
                         $currentBonus = new \IT\Intranet\Applications\CurrentBonus();
+
+                        $prevPeriod = Intranet::getInstance()->getNextPeriod(Intranet::getInstance()->getCurrentPeriodId(), true);
+                        $prevBonus = new \IT\Intranet\Applications\CurrentBonus(0, $prevPeriod);
 
                         $userMoney = new \IT\Intranet\Applications\UserMoney();
                     ?>
 		 			<?/*<p class="text-primary h3">План на текущий месяц</p>
 		 			<p class="h4"><?=number_format($sale_plan, 0, ',', ' ');?> руб</p>
 		 			<hr>*/?>
+                    <p class="month-title"><?=$currentPeriod['NAME']?></p>
 		 			<p class="text-primary h3">Подтверждено</p>
-		 			<p class="h4">
-                        баллов: <?=$currentBonus->getAccepted()?> (<?=$currentBonus->getReward()?> руб.)
-                    </p>
+		 			<p class="h4">баллов: <?=$currentBonus->getAccepted()?> (<?=$currentBonus->getReward()?> руб.)</p>
 		 			<hr>
 		 			<p class="text-primary h3">Ожидает подтверждения</p>
 		 			<p class="h4">баллов: <?=$currentBonus->getAwaiting()?></p>
@@ -55,6 +58,15 @@
                     <p class="h4">
                         <a href="/intranet/money/"><?=$userMoney->getBalance()?></a> руб.
                     </p>
+                    <hr>
+
+                    <p class="month-title"><?=$prevPeriod['NAME']?></p>
+                    <p class="text-primary h3">Подтверждено</p>
+                    <p class="h4">баллов: <?=$prevBonus->getAccepted()?> (<?=$prevBonus->getReward()?> руб.)</p>
+                    <hr>
+                    <p class="text-primary h3">Ожидает подтверждения</p>
+                    <p class="h4">баллов: <?=$prevBonus->getAwaiting()?></p>
+                    <hr>
 
 	 			<? } ?>
  			<? } ?>

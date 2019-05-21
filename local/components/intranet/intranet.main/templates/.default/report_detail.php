@@ -32,9 +32,7 @@ $this->addExternalJS("/local/components/intranet/intranet.main/templates/.defaul
             <tr>
                 <td><strong>Отчетный период</strong></td>
                 <td>
-                    <?=$arResult['REPORT']['PROPERTIES']['WEEK']['VALUE']?> неделя,
-                    <?//=getDaysFromWeek($arResult['REPORT']['PROPERTIES']['WEEK']['VALUE'], $arResult['REPORT']['PROPERTIES']['YEAR']['VALUE']);?>
-                    <?=getDaysFromWeekMonth($arResult['REPORT']['PROPERTIES']['WEEK']['VALUE'], $arResult['REPORT']['PROPERTIES']['MONTH']['VALUE'], $arResult['REPORT']['PROPERTIES']['YEAR']['VALUE'])?>
+                    <?=$arResult['REPORT']["PROPERTY_PERIOD_ID_NAME"]?>
                 </td>
             </tr>
             <tr>
@@ -111,6 +109,18 @@ $this->addExternalJS("/local/components/intranet/intranet.main/templates/.defaul
                     <?}?>
                 </td>
             </tr>
+            <? if(!empty($arResult["FILES"])){?>
+                <tr>
+                    <td><strong>Прикреплённые файлы</strong></td>
+                    <td>
+                        <?foreach($arResult["FILES"] as $file) {?>
+                            <div>
+                                <a href="<?=$file["SRC"]?>"><?=$file["ORIGINAL_NAME"]?></a>
+                            </div>
+                        <?}?>
+                    </td>
+                </tr>
+            <?}?>
         </table>
         <div class="form-group">
             <label for="inputEmail3" class="col-sm-3 control-label">

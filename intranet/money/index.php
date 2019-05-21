@@ -14,5 +14,14 @@ error_reporting('E_ALL');
 	);
 ?>
 
+<?
+$APPLICATION->IncludeComponent(
+	"it:transfer.request",
+	"",
+	[],
+	false
+);
+?>
+
 
 <?require($_SERVER["DOCUMENT_ROOT"]."/bitrix/footer.php");?>

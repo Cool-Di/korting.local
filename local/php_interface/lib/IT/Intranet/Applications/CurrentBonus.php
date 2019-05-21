@@ -49,6 +49,8 @@ class CurrentBonus
 
     private $hlTransfer;
 
+    private $user;
+
     /**
      * @var int
      */
@@ -142,6 +144,8 @@ class CurrentBonus
         else
             $this->userId = $userId;
 
+        $this->user = Intranet::getInstance()->GetUserArr($this->userId);
+
         $this->getMonthSale();
 
     }
@@ -162,7 +166,7 @@ class CurrentBonus
             $arFields = $ob->GetFields();
             if ($arFields['PROPERTY_STATUS_ENUM_ID'] == Intranet::getInstance()->getReportStatusIdByXmlId("ACCEPTED")) {
                 $this->accepted += $arFields['PROPERTY_PRICE_VALUE'];
-            } else {
+            } elseif ($arFields['PROPERTY_STATUS_ENUM_ID'] == Intranet::getInstance()->getReportStatusIdByXmlId("AWAITING")) {
                 $this->awaiting += $arFields['PROPERTY_PRICE_VALUE'];
             }
         }
@@ -205,17 +209,17 @@ class CurrentBonus
             'UF_USER_ID' => $this->getUserId(),
             'UF_PERIOD_ID' => $this->getPeriodId(),
             'UF_DATE_ADDED' => new DateTime(),
-            'UF_COMMENT' => 'Перепод баллов в деньги за период'
+            'UF_COMMENT' => 'Перевод баллов в деньги за период'
         ]);
         if (!$result->isSuccess()) {
             throw new \Exception('Ошибка добавления денежный трансфер в базу');
         }
 
         //Добавление записи в продажи о списании баллов
-        $this->addSystemReport("Списание баллов", (-1) * $this->getAccepted());
+        $this->addSystemReport("Списание баллов " . $this->user['FIO'], (-1) * $this->getAccepted());
 
         //Добавление записи в продажи на следующий период с остатком баллов
-        $this->addSystemReport("Остаток с предыдущего периода", $this->getBalance(), self::getNextPeriod($this->getPeriodId()));
+        $this->addSystemReport("Остаток с предыдущего периода " . $this->user['FIO'], $this->getBalance(), Intranet::getInstance()->getNextPeriod($this->getPeriodId()));
 
     }
 
@@ -250,12 +254,22 @@ class CurrentBonus
             $periodId = $this->getPeriodId();
         }
 
+        $city_shop	= Intranet::getInstance()->GetUserCityShop($this->userId);
+        $city	= $city_shop['city'];
+        $shop	= $city_shop['shop'];
+
         $el = new CIBlockElement;
         $PROP = [];
         $PROP['USER_ID']		= $this->getUserId();
         $PROP['PERIOD_ID']		= $periodId;
         $PROP['PRICE']          = $points;
+        $PROP['SALE_DATE']      = date('d.m.Y');
         $PROP['IS_SYSTEM']      = "Y";
+        $PROP['FIO'] 			= $this->user['FIO'];
+        $PROP['CITY']			= $city['NAME'];
+        $PROP['CITY_ID']		= $city['ID'];
+        $PROP['SHOP']			= $shop['NAME'];
+        $PROP['SHOP_ID']		= $shop['NAME'];
         $PROP['STATUS']         = Intranet::getInstance()->getReportStatusIdByXmlId("ACCEPTED");
         $arLoadProductArray = Array(
             "MODIFIED_BY"    	=> $USER->GetID(),
@@ -271,32 +285,4 @@ class CurrentBonus
         }
     }
 
-    /**
-     * Получение следующего периода по ID предыдущего
-     * @param Int $prevPeriodId
-     * @return null
-     */
-    public static function getNextPeriod(Int $prevPeriodId)
-    {
-        $isFoundPrev = false;
-        $nextPeriod = null;
-        //Отчётные периоды должны быть отсортированы в порядке возврастания, если сортировка одинаковая, то по возрастанию ID
-        $arSelect = Array("ID", "NAME", "ACTIVE_FROM", "ACTIVE_TO", "PROPERTY_BONUS_DAYS");
-        $arFilter = Array(
-            "IBLOCK_ID" => Intranet::getInstance()->PERIOD_IBLOCK_ID,
-            "ACTIVE" => "Y"
-        );
-        $res = CIBlockElement::GetList(Array("SORT" => "ASC", "ID" => "ASC"), $arFilter, false, false, $arSelect);
-        while ($ob = $res->GetNextElement()) {
-            $arFields = $ob->GetFields();
-            if($isFoundPrev) {
-                $nextPeriod = $arFields;
-                break;
-            } elseif($prevPeriodId == $arFields["ID"]) {
-                $isFoundPrev = true;
-            }
-        }
-
-        return $nextPeriod;
-    }
 }

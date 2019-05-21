@@ -264,7 +264,8 @@ function add_offer_show_select($sections, $active_section = '',  $level = '')
 								<td class="p_name"><?=$product['NAME']?></td>
 								<td class="p_code"><?=$product['ARTICLE']?></td>
 								<td class="col-xs-2">
-									<input type="text" class="form-control input-sm" name="FIELDS[PRODUCT_PRICE][]" placeholder="Цена" value="<?=$product['PRICE']?>" />
+                                    <?=$product['PRICE']?>
+                                    <input type="hidden" class="form-control input-sm" name="FIELDS[PRODUCT_PRICE][]" value="<?=$product['PRICE']?>" />
 								</td>
 								<td class="col-xs-2">
 									<input type="number" class="form-control input-sm" name="FIELDS[PRODUCT_COUNT][]" value="<?=$product['COUNT']?>" />
@@ -295,17 +296,29 @@ function add_offer_show_select($sections, $active_section = '',  $level = '')
             <span class="help-block h6"> (Договор, товарный чек, ТОРГ12 и т.д.)</span>
         </label>
         <div class="col-sm-9">
-            <?$APPLICATION->IncludeComponent("bitrix:main.file.input", "drag_n_drop",
-                array(
-                    "INPUT_NAME"=>"FILES",
-                    "MULTIPLE"=>"Y",
-                    "MODULE_ID"=>"iblock",
-                    "MAX_FILE_SIZE"=>"",
-                    "ALLOW_UPLOAD"=>"A",
-                    "ALLOW_UPLOAD_EXT"=>""
-                ),
-                false
-            );?>
+            <? if(!empty($arResult['REPORT'])) {?>
+                <?if(!empty($arResult["FILES"])){?>
+                    <?foreach($arResult["FILES"] as $file) {?>
+                        <div>
+                            <a href="<?=$file["SRC"]?>"><?=$file["ORIGINAL_NAME"]?></a>
+                        </div>
+                    <?}?>
+                <?} else {?>
+                    -
+                <?}?>
+            <?} else {?>
+                <?$APPLICATION->IncludeComponent("bitrix:main.file.input", "drag_n_drop",
+                    array(
+                        "INPUT_NAME"=>"FILES",
+                        "MULTIPLE"=>"Y",
+                        "MODULE_ID"=>"iblock",
+                        "MAX_FILE_SIZE"=>"",
+                        "ALLOW_UPLOAD"=>"A",
+                        "ALLOW_UPLOAD_EXT"=>""
+                    ),
+                    false
+                );?>
+            <?}?>
         </div>
     </div>
 	

@@ -19,9 +19,16 @@ $aMenuLinks = Array(
 		"/intranet/reports/", 
 		Array(), 
 		Array(), 
-		"CSite::InGroup(array(1, 6))" 
+		"CSite::InGroup(array(1, 6, 10))"
 	),
-	Array(
+    Array(
+        "Информция",
+        "/intranet/info/",
+        Array(),
+        Array(),
+        "CSite::InGroup(array(1, 6, 8, 10))"
+    ),
+	/*Array(
 		"Статистика", 
 		"/intranet/statistics/", 
 		Array(), 
@@ -34,7 +41,7 @@ $aMenuLinks = Array(
 		Array(), 
 		Array(), 
 		"CSite::InGroup(array(1, 6))" 
-	),
+	),*/
 	Array(
 		"Сайт Академии", 
 		"/",

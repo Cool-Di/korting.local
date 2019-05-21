@@ -84,7 +84,7 @@ function OnAfterIBlockElementAddHandler(&$arFields)
 				"EMAIL" => $email_from,
 				"MESSAGE" =>$arFields["DETAIL_TEXT"],
 			);
-			CEvent::Send("MAIL_DELIVERY", 's1', $arFields); 
+			//CEvent::Send("MAIL_DELIVERY", 's1', $arFields);  //11.05.2019 скрою, пока не понятн для чего отправка этих писем
 		}  
 	} 
 }

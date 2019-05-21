@@ -481,9 +481,17 @@ class IntranetComp
 			$arResult['ERRORS'][] = 'Продажа с заданным ID не найдена';
 		}
 
+        foreach($arFields['PROPERTIES']["FILES"]["VALUE"] as $file_id){
+            $arResult['FILES'][] = CFile::GetFileArray($file_id);
+        }
+
 		$arResult['REPORT']		= $report_ar;
-		
-		LocalRedirect('/intranet/reports/');
+
+        $url = '/intranet/reports/';
+        if(!empty($_REQUEST['FILTERS'])) {
+            $url .= "?".http_build_query(['FILTERS' => $_REQUEST['FILTERS']]);  // Сохраняем фильтр при возвращении на страницу отчётов
+        }
+		LocalRedirect($url);
 		
 		return $arResult;
 		
@@ -661,11 +669,10 @@ if($access_level < 100)
 		
 		$cities				= Intranet::getInstance()->GetCityShopList();
 		$arResult['CITIES']	= $cities;
-		
 			
 		
 		$report_ar			= array();
-		$arSelect 			= Array("ID", "IBLOCK_ID", "NAME", "PROPERTY_USER_ID");
+		$arSelect 			= Array("ID", "IBLOCK_ID", "NAME", "PROPERTY_USER_ID", "PROPERTY_PERIOD_ID.NAME");
 		$arFilter 			= Array("IBLOCK_ID" => Intranet::getInstance()->REPORT_IBLOCK_ID, "ID" => $report_id);
 		$res 				= CIBlockElement::GetList(Array('PROPERTY_WEEK' => 'DESC'), $arFilter, false, Array("nTopCount"=>1), $arSelect);
 		if($ob = $res->GetNextElement())
@@ -685,6 +692,10 @@ if($access_level < 100)
 		{
 			$arResult['ERRORS'][] = 'Продажа с заданным ID не найдена';
 		}
+
+        foreach($arFields['PROPERTIES']["FILES"]["VALUE"] as $file_id){
+            $arResult['FILES'][] = CFile::GetFileArray($file_id);
+        }
 
 		$arResult['REPORT']		= $report_ar;
 		
@@ -739,9 +750,15 @@ if($access_level < 100)
             $arFields = $ob->GetFields();
             $arResult['PERIODS'][$arFields['ID']] = $arFields;
         }
+
+        //Получение всех статусов
+        $property_enums = CIBlockPropertyEnum::GetList(Array("DEF" => "DESC", "SORT" => "ASC"), Array("IBLOCK_ID" => $this->REPORT_IBLOCK_ID, "CODE" => "STATUS"));
+        while ($enum_fields = $property_enums->GetNext()) {
+            $arResult['STATUSES'][$enum_fields['ID']] = $enum_fields;
+        }
 		
 		//Определение свойств по которым можно фильтровать
-		$filter_property		= array("PROPERTY_CITY_ID", "PROPERTY_SHOP_ID", "PROPERTY_USER_ID", "PROPERTY_PERIOD_ID");
+		$filter_property		= array("PROPERTY_CITY_ID", "PROPERTY_SHOP_ID", "PROPERTY_USER_ID", "PROPERTY_PERIOD_ID", "PROPERTY_STATUS");
 		$arResult['FILTERS']	= array();
 		foreach($filter_property as $fp)
 		{
@@ -980,7 +997,7 @@ if($access_level < 100)
                         'PROPERTY_USER_ID' => $user_data['ID']
                         );
 
-		$res 				= CIBlockElement::GetList(Array('ID' => 'DESC'), $arFilter, false, Array("nTopCount"=>20), $arSelect);
+		$res 				= CIBlockElement::GetList(Array('PROPERTY_SALE_DATE' => 'DESC'), $arFilter, false, Array("nTopCount"=>20), $arSelect);
 		while($ob = $res->GetNextElement())
 		{
 			$arFields 				= $ob->GetFields();
@@ -1052,6 +1069,7 @@ if($access_level < 100)
                 array("ACTIVE_DATE" => "Y"),
                 array(">=PROPERTY_LAST_DAY" => date('Y-m-d')),
             ),
+            "<=DATE_ACTIVE_FROM" => date('d.m.Y')
         );
         $res = CIBlockElement::GetList(Array(), $arFilter, false, false, $arSelect);
         while ($ob = $res->GetNextElement()) {
@@ -1070,6 +1088,10 @@ if($access_level < 100)
             //$arResult['PERIODS'][$arFields['ID']] = $arFields;
         }
 
+        if(!$startDate || !$startDate) {
+            echo "Не найдены даты продаж";
+            die();
+        }
         $arResult["START_DATE"] = [
             "JS" => $startDate->format('Y-m-d'),
             "PHP" => $startDate->format('d.m.Y'),
@@ -1109,6 +1131,12 @@ if($access_level < 100)
                     throw new \Exception('Эта запись недоступна для редактирования');
                 }
 
+                $access_level		= Intranet::getInstance()->GetUserAccessLevel();
+                if($access_level < 100 && $arFields['PROPERTIES']['STATUS']['VALUE_XML_ID'] == 'ACCEPTED') {
+                    $arResult['ERRORS'][] = 'Доступ к редактированию принятого отчёта запрещён';
+                    throw new \Exception('Доступ к редактированию принятого отчёта запрещён');
+                }
+
 				$arOldReport = $arFields;
 				
 				$arFields['USER']		= Intranet::getInstance()->GetUserArr($arFields['PROPERTIES']['USER_ID']['VALUE']);
@@ -1137,6 +1165,10 @@ if($access_level < 100)
 			{
 				$arResult['ERRORS'][] = 'Продажа с заданным ID не найдена';
 			}
+
+            foreach($arFields['PROPERTIES']["FILES"]["VALUE"] as $file_id){
+                $arResult['FILES'][] = CFile::GetFileArray($file_id);
+            }
 		}
 		
 		if(isset($_POST) && sizeof($_POST) > 0)
@@ -1374,9 +1406,7 @@ if($access_level < 100)
 								"PRODUCT_STRING" => $product_string,
 								"PRICE" => $arResult['PRICE_SUM'],
 								"COMMENT" => $arResult['FIELDS']['COMMENT'],
-								"MARKETING" => $arResult['FIELDS']['MARKETING'],
-								"WEEK" => $arResult['WEEK_NUMBER'],
-								"YEAR" => $PROP['YEAR'],
+                                "REPORT_LINK" => "/intranet/reports/?action=report_detail&report_id=" . $PRODUCT_ID
 								
 							);
 						CEvent::Send("NEW_REPORT", 's1', $arFields);

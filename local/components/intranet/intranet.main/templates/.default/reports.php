@@ -12,6 +12,15 @@
             <? } ?>
         </select>
     </div>
+    <div class="form-group">
+        <label class="" for="FILTERS[PROPERTY_STATUS]">Статус</label>
+        <select name="FILTERS[PROPERTY_STATUS]" class="form-control">
+            <option value="">-</option>
+            <? foreach($arResult['STATUSES'] as $item) { ?>
+                <option value="<?=$item['ID']?>" <?=($item['ID'] == $arResult['FILTERS']['PROPERTY_STATUS'] ? 'selected="selected"' : '')?>><?=$item['VALUE']?></option>
+            <? } ?>
+        </select>
+    </div>
 	<div class="form-group">
 		<label class="" for="FILTERS[PROPERTY_CITY_ID]">Город</label>
 		<select name="FILTERS[PROPERTY_CITY_ID]" class="form-control">
@@ -63,10 +72,10 @@
 	if(isset($_REQUEST['FILTERS']['PROPERTY_USER_ID']) && !empty($_REQUEST['FILTERS']['PROPERTY_USER_ID']))
 		$filter_param .= '&PROPERTY_USER_ID='.$_REQUEST['FILTERS']['PROPERTY_USER_ID'];
 ?>
-<div class="text-right">
+<?/*<div class="text-right">
 <a href="/intranet/excel.php?<?=$filter_param?>" class="">Скачать excel</a> | 
 <a href="/intranet/excel_product.php?<?=$filter_param?>" class="">Скачать excel c разбивкой по товарам</a>
-</div>
+</div>*/?>
 <br/>
 
 <form method="post">
@@ -98,11 +107,11 @@
 		}
 	?>
         <? if($report['PROPERTIES']['IS_SYSTEM']['VALUE']) {?>
-            <tr>
-                <td></td>
-                <td></td>
+            <tr class="system_row">
+                <td><?=$report['PROPERTIES']['CITY']['VALUE']?> /<br/><?=$report['PROPERTIES']['SHOP']['VALUE']?> </td>
+                <td><?=$report['PROPERTIES']['FIO']['VALUE']?></td>
                 <td><?=$report['PROPERTY_PERIOD_ID_NAME']?></td>
-                <td></td>
+                <td><?=$report['PROPERTIES']['SALE_DATE']['VALUE']?></td>
                 <td class="products"><?=$report['NAME']?> (ID <?=$report['ID']?>)</td>
                 <td class="price"><?=$report['PROPERTIES']['PRICE']['VALUE'];?></td>
                 <td><?=$report['PROPERTIES']['STATUS']['VALUE']?></td>
@@ -136,7 +145,11 @@
                 <? } ?>
 
             </td>
-            <td><a href="/intranet/reports?action=report_detail&report_id=<?=$report['ID']?>" class="btn btn-default btn-success"><span class="glyphicon glyphicon-search"></span></a></td>
+            <td>
+                <a href="/intranet/reports?action=report_detail&report_id=<?=$report['ID']?>&<?=http_build_query(['FILTERS' => $_REQUEST['FILTERS']])?>" class="btn btn-default btn-success">
+                    <span class="glyphicon glyphicon-pencil"></span>
+                </a>
+            </td>
           </tr>
         <?}?>
 	<? } ?>

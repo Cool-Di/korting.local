@@ -14,12 +14,14 @@ class Intranet
 	
 	private $USER_GROUP_ACCESS_LEVEL	= array(
 											1 => 100, 
-											6 => 100, 
+											6 => 100, //пользователь панели управления
+                                            10 => 100, //модератор
 											8 => 10
 										);
 	public $USER_GROUP					= array(
 											'SELLER' => 8, 
-											'ADMIN' => 1
+											'ADMIN' => 1,
+                                            'MODERATOR' => 10
 										);
 
     /**
@@ -33,6 +35,7 @@ class Intranet
 	 * ID текущего периода, который определяется по текущей дате
 	 */
 	private $currentPeriodId;
+    private $currentPeriod;
 	
 	public static function getInstance()
 	{
@@ -395,6 +398,60 @@ class Intranet
             }
             return $this->currentPeriodId;
         }
+    }
+
+    public function getCurrentPeriod() {
+        if($this->currentPeriod) {
+            return $this->currentPeriod;
+        } else {
+            $arSelect = Array("ID", "NAME", "ACTIVE_FROM", "ACTIVE_TO", "PROPERTY_LAST_DAY");
+            $arFilter = Array(
+                "IBLOCK_ID" => Intranet::getInstance()->PERIOD_IBLOCK_ID,
+                "ACTIVE_DATE" => "Y",
+            );
+            $res = CIBlockElement::GetList(Array(), $arFilter, false, false, $arSelect);
+            if ($period = $res->Fetch()) {
+                $this->currentPeriod = $period;
+            } else {
+                throw new \Exception('В БД не заведён отчетный период, соответстующий текущей дате');
+            }
+            return $this->currentPeriod;
+        }
+    }
+
+    /**
+     * Получение следующего периода по ID предыдущего
+     * @param int $prevPeriodId
+     * @param bool $desc - если false то берётся следующий период, если true берётся предыдущий период
+     * @return null
+     */
+    public static function getNextPeriod(int $prevPeriodId, $desc = false)
+    {
+        $isFoundPrev = false;
+        $nextPeriod = null;
+        if($desc) {
+            $sortType = 'DESC';
+        } else {
+            $sortType = 'ASC';
+        }
+        //Отчётные периоды должны быть отсортированы в порядке возврастания, если сортировка одинаковая, то по возрастанию ID
+        $arSelect = Array("ID", "NAME", "ACTIVE_FROM", "ACTIVE_TO", "PROPERTY_BONUS_DAYS");
+        $arFilter = Array(
+            "IBLOCK_ID" => Intranet::getInstance()->PERIOD_IBLOCK_ID,
+            "ACTIVE" => "Y"
+        );
+        $res = CIBlockElement::GetList(Array("SORT" => $sortType, "ID" => $sortType), $arFilter, false, false, $arSelect);
+        while ($ob = $res->GetNextElement()) {
+            $arFields = $ob->GetFields();
+            if($isFoundPrev) {
+                $nextPeriod = $arFields;
+                break;
+            } elseif($prevPeriodId == $arFields["ID"]) {
+                $isFoundPrev = true;
+            }
+        }
+
+        return $nextPeriod;
     }
 }
 
