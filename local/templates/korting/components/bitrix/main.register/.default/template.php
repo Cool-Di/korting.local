@@ -177,7 +177,7 @@ if ($arResult["USE_CAPTCHA"] == "Y")
 			<td></td>
 			<td>
 				<input type="hidden" name="captcha_sid" value="<?=$arResult["CAPTCHA_CODE"]?>" />
-				<img src="/bitrix/tools/captcha.php?captcha_sid=<?=$arResult[" width="180" height="40" alt="CAPTCHA" />
+				<img src="/bitrix/tools/captcha.php?captcha_sid=<?=$arResult["CAPTCHA_CODE"]?>" width="180" height="40" alt="CAPTCHA" />
 			</td>
 		</tr>
 		<tr>

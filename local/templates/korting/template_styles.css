@@ -1132,3 +1132,7 @@ filter: alpha(opacity=100);
 
 .question_result {margin:20px 0 20px 15px;llist-style: none;}
 .question_result li {margin: 0 0 5px 0;}
+
+select.company_list {
+	width: 193px;
+}

@@ -92,7 +92,7 @@ if ($arResult['SHOW_ERRORS'] == 'Y' && $arResult['ERROR'])
 										</div>		
 										</form>
 								<div class="clear"></div>
-							<a href="/registration/" rel="nofollow" class="btn_reg">Регистрация</a>
+							<a href="/registration" rel="nofollow" class="btn_reg">Регистрация</a>
 						</td>
 					</tr>
 				</tbody>

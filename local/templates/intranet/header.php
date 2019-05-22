@@ -3,6 +3,10 @@ IncludeTemplateLangFile(__FILE__);
 
 /*if($_REQUEST['testtest'])
 	CUser::Authorize(198);*/
+if (!$USER->IsAuthorized())
+{
+    LocalRedirect('/auth/');
+}
 
 $obAsset = \Bitrix\Main\Page\Asset::getInstance();
 ?>
