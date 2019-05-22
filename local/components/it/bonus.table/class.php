@@ -3,7 +3,7 @@
  * Компонент с таблицей наград за бонусы
  */
 
-use IT\Intranet\Models\BonusEntity;
+use IT\Intranet\Entity\BonusEntity;
 
 class BonusListComponent extends CBitrixComponent
 {
@@ -31,11 +31,12 @@ class BonusListComponent extends CBitrixComponent
 
         //Получение разделов товаров
         $sections_ids	= array();
-        $arSelect		= array('ID', 'NAME', 'IBLOCK_SECTION_ID');
-        $arFilter		= array("IBLOCK_ID" => Intranet::getInstance()->PRODUCT_IBLOCK_ID, );
+        $arSelect		= array('ID', 'NAME', 'IBLOCK_SECTION_ID', "DEPTH_LEVEL");
+        $arFilter		= array("IBLOCK_ID" => Intranet::getInstance()->PRODUCT_IBLOCK_ID, "ACTIVE" => "Y");
         $ar_result		= CIBlockSection::GetList(Array("left_margin"=>"asc"), $arFilter, false, $arSelect);
         while($res = $ar_result->GetNext())
         {
+            $res["NAME"] = mb_convert_case($res["NAME"], MB_CASE_TITLE, "UTF-8");
             $sections_ids[$res['ID']]	= $res;
         }
 

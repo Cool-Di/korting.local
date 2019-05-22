@@ -5,7 +5,7 @@ namespace IT\Intranet\Applications;
 
 use CIBlockElement;
 use Intranet;
-use IT\Intranet\Models\BonusEntity;
+use IT\Intranet\Entity\BonusEntity;
 
 class Bonus
 {

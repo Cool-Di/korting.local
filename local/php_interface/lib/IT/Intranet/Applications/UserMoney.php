@@ -6,7 +6,7 @@ namespace IT\Intranet\Applications;
 
 use Bitrix\Main\Entity\ReferenceField;
 use Bitrix\Main\Type\DateTime;
-use IT\Intranet\Models\MoneyTransferEntity;
+use IT\Intranet\Entity\MoneyTransferEntity;
 
 \CModule::IncludeModule('iblock');
 

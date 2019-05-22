@@ -3,7 +3,7 @@
  * Компонент с движением денежных средства
  */
 
-use IT\Intranet\Models\BonusEntity;
+use IT\Intranet\Entity\BonusEntity;
 use Bitrix\Main\Type\DateTime;
 
 class TransferListComponent extends CBitrixComponent

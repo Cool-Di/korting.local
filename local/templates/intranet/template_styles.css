@@ -1176,3 +1176,13 @@ form.plan_filter div.form-group label {display: block;}
 	color: #00cc00;
 	font-size: 24px;
 }
+
+.product_section {
+	font-weight: bold;
+	color: #0a3a68;
+	font-size: 130%;
+}
+
+.product_subsection {
+	font-weight: bold;
+}

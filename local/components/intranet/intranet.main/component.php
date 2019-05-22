@@ -3,6 +3,7 @@ if(!defined("B_PROLOG_INCLUDED")||B_PROLOG_INCLUDED!==true)die();
 error_reporting(E_ALL ^ E_NOTICE);
 //$this->IncludeComponentTemplate();
 
+use IT\Intranet\Models\PeriodModel;
 
 
 CModule::IncludeModule('iblock');
@@ -111,7 +112,7 @@ class IntranetComp
 					$this->templatePage	= 'reports_by_month';
 				break;
 				case 'report_detail':
-				    //хак, post от форму с другим url почему то приходит пусты, поэтому добавлен secondary_action для вызова AdoptedReport
+				    //хак, post от формы с другим url почему то приходит пусты, поэтому добавлен secondary_action для вызова AdoptedReport
 				    if($_REQUEST['secondary_action']) {
                         $component->arResult	= $this->AdoptedReport();
                         $this->templatePage		= 'report_detail';
@@ -522,7 +523,6 @@ class IntranetComp
 			$reports_to_adopted	= $_REQUEST['FIELDS']['REPORT_ID'];
 
 
-		$i					= 0;
 		$report_ar			= array();
 		$arSelect 			= Array("ID", "IBLOCK_ID", "NAME", "PROPERTY_USER_ID", "PROPERTY_ADOPTED");
 		$arFilter 			= Array(
@@ -550,13 +550,11 @@ class IntranetComp
             ];
 
             CIBlockElement::SetPropertyValuesEx($arFields['ID'], Intranet::getInstance()->REPORT_IBLOCK_ID, $updatedProps);
-			
-			$i++;
 		}
 
 		$arResult['REPORT']		= $report_ar;
-		
-		LocalRedirect('/intranet/reports/');
+
+        LocalRedirect($GLOBALS["APPLICATION"]->GetCurPageParam());
 		
 		return $arResult;
 		
@@ -820,6 +818,10 @@ if($access_level < 100)
             $currentBonus = new \IT\Intranet\Applications\CurrentBonus($arResult['FILTERS']["PROPERTY_USER_ID"], $arResult['FILTERS']["PROPERTY_PERIOD_ID"]);
             $arResult["CURRENT_BONUS"] = $currentBonus->toArray();
             $arResult["EXIST_TRANSFER"] = $currentBonus->existTransfer();
+
+            $period = new PeriodModel($arResult['FILTERS']["PROPERTY_PERIOD_ID"]);
+            $arResult["IS_FINISHED"] = $period->isFinished(); //период закончился и можно начислять баллы
+            $arResult["LAST_DAY"] = $period->getPeriodLastDate()->format("d.m.Y");
 
             //Команда на зачисление денег на счёт
             if($_POST["transferBonus"] && !$arResult["HAVE_AWAITING"] && !$arResult["EXIST_TRANSFER"]) {

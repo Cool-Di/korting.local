@@ -1,6 +1,6 @@
 <?php
 
-namespace IT\Intranet\Models;
+namespace IT\Intranet\Entity;
 
 
 class MoneyTransferEntity extends AbstractEntity

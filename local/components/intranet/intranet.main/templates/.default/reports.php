@@ -203,6 +203,8 @@
             Период уже закрыт
         <?} elseif($arResult["HAVE_AWAITING"]){?>
             Нельзя списать баллы, пока есть необработанные отчёты
+        <?} elseif(!$arResult["IS_FINISHED"]) {?>
+            Отчётный период ещё не завершён (до <?=$arResult["LAST_DAY"]?>)
         <?} else {?>
             <input type="hidden" name="transferBonus" value="1">
             <button class="btn btn-default btn-success">Записать баллы на счёт</button>

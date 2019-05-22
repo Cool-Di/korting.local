@@ -3,7 +3,7 @@
  * Компонент для запроса снятия денежных средств
  */
 
-use IT\Intranet\Models\BonusEntity;
+use IT\Intranet\Entity\BonusEntity;
 use Bitrix\Main\Type\DateTime;
 
 class TransferRequestComponent extends CBitrixComponent

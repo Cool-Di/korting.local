@@ -1,7 +1,7 @@
 <?php
 
 
-namespace IT\Intranet\Models;
+namespace IT\Intranet\Entity;
 
 
 use Bitrix\Highloadblock\HighloadBlockTable;

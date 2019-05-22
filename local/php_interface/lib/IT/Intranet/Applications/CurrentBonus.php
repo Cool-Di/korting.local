@@ -6,49 +6,21 @@ namespace IT\Intranet\Applications;
 
 use CIBlockElement;
 use Intranet;
-use IT\Intranet\Models\BonusEntity;
-use IT\Intranet\Models\MoneyTransferEntity;
+use IT\Intranet\Entity\BonusEntity;
+use IT\Intranet\Entity\MoneyTransferEntity;
 use Bitrix\Main\Type\DateTime;
 
 class CurrentBonus
 {
-    /**
-     * @var int
-     */
+    private $period = null;
     private $periodId = 0;
-
-    /**
-     * @var int
-     */
     private $userId = 0;
-
-    /**
-     * @var int
-     */
     private $accepted = 0;
-
-    /**
-     * @var int
-     */
     private $awaiting = 0;
-
-    /**
-     * @var int
-     */
     private $reward = 0;
-
-    /**
-     * @var int
-     */
     private $balance = 0;
-
-    /**
-     * @var Bonus
-     */
     private $bonusInstance;
-
     private $hlTransfer;
-
     private $user;
 
     /**
@@ -133,7 +105,6 @@ class CurrentBonus
         global $USER;
 
         $this->bonusInstance = Bonus::getInstance();
-
         if (!intval($periodId))
             $this->periodId = Intranet::getInstance()->getCurrentPeriodId();
         else

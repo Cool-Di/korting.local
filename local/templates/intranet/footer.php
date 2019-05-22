@@ -40,7 +40,7 @@
                         $currentBonus = new \IT\Intranet\Applications\CurrentBonus();
 
                         $prevPeriod = Intranet::getInstance()->getNextPeriod(Intranet::getInstance()->getCurrentPeriodId(), true);
-                        $prevBonus = new \IT\Intranet\Applications\CurrentBonus(0, $prevPeriod);
+                        $prevBonus = new \IT\Intranet\Applications\CurrentBonus(0, $prevPeriod["ID"]);
 
                         $userMoney = new \IT\Intranet\Applications\UserMoney();
                     ?>
@@ -60,13 +60,15 @@
                     </p>
                     <hr>
 
-                    <p class="month-title"><?=$prevPeriod['NAME']?></p>
-                    <p class="text-primary h3">Подтверждено</p>
-                    <p class="h4">баллов: <?=$prevBonus->getAccepted()?> (<?=$prevBonus->getReward()?> руб.)</p>
-                    <hr>
-                    <p class="text-primary h3">Ожидает подтверждения</p>
-                    <p class="h4">баллов: <?=$prevBonus->getAwaiting()?></p>
-                    <hr>
+                    <? if(!$prevBonus->existTransfer()) {?>
+                        <p class="month-title"><?=$prevPeriod['NAME']?></p>
+                        <p class="text-primary h3">Подтверждено</p>
+                        <p class="h4">баллов: <?=$prevBonus->getAccepted()?> (<?=$prevBonus->getReward()?> руб.)</p>
+                        <hr>
+                        <p class="text-primary h3">Ожидает подтверждения</p>
+                        <p class="h4">баллов: <?=$prevBonus->getAwaiting()?></p>
+                        <hr>
+                    <?}?>
 
 	 			<? } ?>
  			<? } ?>

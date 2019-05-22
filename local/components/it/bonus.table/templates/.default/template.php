@@ -27,10 +27,12 @@
     </thead>
     <tbody>
     <?foreach($arResult['SECTIONS'] as $section) {?>
-        <? if(empty($section['products']))
-            continue;?>
         <tr>
-            <td colspan="3"><b><?=$section['NAME']?></b></td>
+            <? if($section['DEPTH_LEVEL'] == 1) {?>
+                <td colspan="3" class="product_section"><?=$section['NAME']?></td>
+            <?} else {?>
+                <td colspan="3" class="product_subsection"><?=$section['NAME']?></td>
+            <?}?>
         </tr>
         <?foreach($section['products'] as $product) {?>
             <tr>

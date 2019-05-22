@@ -22,7 +22,7 @@ $aMenuLinks = Array(
 		"CSite::InGroup(array(1, 6, 10))"
 	),
     Array(
-        "Информция",
+        "Информация",
         "/intranet/info/",
         Array(),
         Array(),
