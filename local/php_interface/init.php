@@ -19,6 +19,8 @@ include_once('intranet.php');
 #
 require_once($_SERVER['DOCUMENT_ROOT'].'/local/php_interface/lib/loader.php');
 
+require_once('agent.php');
+
 class Korting
 {	
 	//Здесь хранится экземпляр класса
