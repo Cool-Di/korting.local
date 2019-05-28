@@ -2,9 +2,9 @@
 define("DBPersistent", false);
 $DBType = "mysql";
 $DBHost = "localhost";
-$DBLogin = "root";
-$DBPassword = "";
-$DBName = "krtng_academy";
+$DBLogin = "dev";
+$DBPassword = "Nc626p64pDG55NUd";
+$DBName = "b2c";
 $DBDebug = true;
 $DBDebugToFile = false;
 
