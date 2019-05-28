@@ -25,7 +25,7 @@ $obAsset = \Bitrix\Main\Page\Asset::getInstance();
 
     $obAsset->addJs('/intranet/media/fancyapps/source/jquery.fancybox.pack.js?v=2.1.5'); //Add fancyBox
 
-    $obAsset->addJs('/intranet/media/js/scripts.js');
+    $obAsset->addJs('/intranet/media/js/main.js');
     ?>
     <!-- Bootstrap -->
     <link href="/intranet/media/bootsrtap/css/bootstrap.min.css" rel="stylesheet">

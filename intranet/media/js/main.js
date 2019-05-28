@@ -1,5 +1,4 @@
 $(document).ready(function() {
-	
 	$('a.checked_all_report').click(function(){
 		$('table.reports_table input[name="FIELDS[REPORT_ID][]"]').attr('checked', 'checked');
 		
