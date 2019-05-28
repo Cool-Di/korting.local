@@ -1,6 +1,7 @@
 # common bx
 /upload/
 /bitrix/
+/cache/
 
 # Порочные файлы от OS
 *~
@@ -49,6 +50,7 @@ $RECYCLE.BIN/
 /sitemap*.xml
 *.log
 /local/php_interface/init_local.php
+/local/php_interface/dbconn.php
 /_backup/
 
 **/flags/*.flag
