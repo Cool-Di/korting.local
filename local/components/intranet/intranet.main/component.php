@@ -1077,8 +1077,8 @@ if($access_level < 100)
         while ($ob = $res->GetNextElement()) {
             $arFields = $ob->GetFields();
             //Переводим время в класс PHP
-            $periodStartDate = DateTime::createFromFormat("d.m.Y", $arFields["ACTIVE_FROM"]);
-            $periodEndDate = DateTime::createFromFormat("d.m.Y", $arFields["ACTIVE_TO"]);
+            $periodStartDate = DateTime::createFromFormat("d.m.Y", ConvertDateTime($arFields["ACTIVE_FROM"], "DD.MM.YYYY"));
+            $periodEndDate = DateTime::createFromFormat("d.m.Y", ConvertDateTime($arFields["ACTIVE_TO"], "DD.MM.YYYY"));
             //Сравниваем локальные даты с глобальными и расширяем доступный интервал если нужно
             if(!$startDate || ($startDate && $startDate > $periodStartDate)) {
                 $startDate = $periodStartDate;

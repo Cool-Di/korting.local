@@ -2,6 +2,7 @@
 /upload/
 /bitrix/
 /cache/
+/exchange/
 
 # Порочные файлы от OS
 *~
