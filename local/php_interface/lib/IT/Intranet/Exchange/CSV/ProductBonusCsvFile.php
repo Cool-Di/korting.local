@@ -6,8 +6,8 @@ namespace IT\Intranet\Exchange\CSV;
 
 class ProductBonusCsvFile extends CsvFile
 {
-    protected $fileName = 'test.csv';
-    protected $filePath = '/test/';
+    protected $fileName = 'points.csv';
+    protected $filePath = '/exchange/';
     protected $fullName = '';
 
     public function __construct()

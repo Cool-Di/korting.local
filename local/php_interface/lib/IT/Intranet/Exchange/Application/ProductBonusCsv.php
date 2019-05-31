@@ -19,17 +19,17 @@ class ProductBonusCsv
 
     public function updateBonus() {
         foreach($this->fileData as $row) {
-            if((int)$row['ID'] <= 0)
+            if((int)$row['code'] <= 0)
                 continue;
 
             $arSelect = Array("ID", "IBLOCK_ID", "NAME", "XML_ID", "PROPERTY_POINTS");
             $arFilter = [
                 "IBLOCK_ID" => Intranet::getInstance()->PRODUCT_IBLOCK_ID,
-                "XML_ID" => $row['ID']
+                "XML_ID" => $row['code']
             ];
             $res = CIBlockElement::GetList(['ID' => 'DESC'], $arFilter, false, false, $arSelect);
             if($product = $res->Fetch()) {
-                CIBlockElement::SetPropertyValuesEx($product['ID'], Intranet::getInstance()->PRODUCT_IBLOCK_ID, array("POINTS" => $row['POINTS']));
+                CIBlockElement::SetPropertyValuesEx($product['ID'], Intranet::getInstance()->PRODUCT_IBLOCK_ID, array("POINTS" => $row['points']));
             }
         }
     }

@@ -42,11 +42,11 @@ $aMenuLinks = Array(
 		Array(), 
 		"CSite::InGroup(array(1, 6))" 
 	),*/
-	Array(
+	/*Array(
 		"Сайт Академии", 
 		"/",
 		Array(), 
 		Array()
-	),
+	),*/
 );
 ?>

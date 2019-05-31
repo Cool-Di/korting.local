@@ -4,6 +4,8 @@
 namespace IT\Intranet\Exchange\CSV;
 
 
+use mysql_xdevapi\Exception;
+
 abstract class CsvFile
 {
     protected $fileName = 'default.csv';
@@ -20,6 +22,9 @@ abstract class CsvFile
     public function loadData() {
         $i = 1;
         $file = @fopen($this->fullName , "r");
+        if(!$file) {
+            throw new \Exception("Файл загрузки баллов не найден: " . $this->fullName);
+        }
         while (($row = fgetcsv($file, 0, ";")) !== false) {
             if($this->firstRowTitle && $i == 1) {
                 foreach($row as $rowTitle) {

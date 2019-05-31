@@ -32,8 +32,8 @@ class TransferRequestComponent extends CBitrixComponent
             $arFields = Array(
                 "USERNAME" => $GLOBALS["USER"]->GetFullName(),
                 "COMMENT" => htmlspecialcharsEx($_POST["COMMENT"]),
-                "REPORT_LINK" => "/intranet/money/add_transfer.php?USER_ID=" . $GLOBALS["USER"]->GetID()
-
+                "REPORT_LINK" => "/intranet/money/add_transfer.php?USER_ID=" . $GLOBALS["USER"]->GetID(),
+                "BALANCE" => $this->arResult['BALANCE']
             );
             CEvent::Send("MONEY_REQUEST", 's1', $arFields);
             setcookie('money_requested', "Y", time() + 60*24, '/');
