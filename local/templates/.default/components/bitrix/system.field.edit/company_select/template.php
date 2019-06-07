@@ -2,8 +2,8 @@
 
 $bWasSelect = false;
 
-/*?>
-<select class="company_list" name="<?=$arParams["arUserField"]["FIELD_NAME"]?>">
+?>
+<select class="company_list" name="<?=$arParams["arUserField"]["FIELD_NAME"]?>" style="display: none;">
 <option value="-1"<?=($_POST['UF_COMPANY'] == -1? ' selected="selected"' : '')?>>Другая</option>
 <?
 foreach ($arParams["arUserField"]["USER_TYPE"]["FIELDS"] as $key => $val)
@@ -18,6 +18,5 @@ foreach ($arParams["arUserField"]["USER_TYPE"]["FIELDS"] as $key => $val)
 	<option value="<?=$key?>"<?=($bSelected? " selected" : "")?>><?=$val?></option><?	
 }
 ?>
-</select> */?>
-<input type="hidden" name="<?=$arParams["arUserField"]["FIELD_NAME"]?>" value="-1" />
+</select>
 <input type="text" class="text" name="new_company" value="<?=$_POST['new_company']?>"/>
