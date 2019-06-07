@@ -56,20 +56,20 @@ AddEventHandler("main", "OnBeforeUserUpdate", "OnBeforeUserUpdateHandler");
 AddEventHandler("iblock", "OnAfterIBlockElementAdd", "OnAfterIBlockElementAddHandler");
 
 function OnBeforeUserUpdateHandler(&$arFields)
-{	
-	//if($arFields["ACTIVE"] == "Y" && $arFields["UF_STATUS"] == "" || $arFields["UF_STATUS"] != "active"){
-		$rsUser = CUser::GetByLogin($arFields["LOGIN"]);
-		$arUser = $rsUser->Fetch();
-		$email_from = COption::GetOptionString("main", "email_from", "N"); 
+{
+    //if($arFields["ACTIVE"] == "Y" && $arFields["UF_STATUS"] == "" || $arFields["UF_STATUS"] != "active"){
+    $rsUser = CUser::GetByLogin($arFields["LOGIN"]);
+    $arUser = $rsUser->Fetch();
+    $email_from = COption::GetOptionString("main", "email_from", "N");
 
-		$_arFields = Array(
-			"EMAIL_TO" => $arUser["EMAIL"],
-			"EMAIL" => $email_from,
-			"LOGIN" =>$arUser["LOGIN"],
-		);
-		CEvent::Send("USER_ACTIVATE", 's1', $_arFields); 
-		//$arFields["UF_STATUS"] = "active";
-	//}
+    $_arFields = Array(
+        "EMAIL_TO" => $arUser["EMAIL"],
+        "EMAIL" => $email_from,
+        //"LOGIN" =>$arUser["LOGIN"],
+    );
+    \CEvent::Send("USER_ACTIVATE", 's1', $_arFields);
+    //$arFields["UF_STATUS"] = "active";
+    //}
 }
 
 function OnAfterIBlockElementAddHandler(&$arFields)
