@@ -54,7 +54,7 @@ $(document).ready(function() {
 	});
 	
 	//Селект компании в форме регистрации
-	if($('select.company_list').val() == -1)
+	/*if($('select.company_list').val() == -1)
 		$('input[name="new_company"]').show();
 	else
 		$('input[name="new_company"]').hide();
@@ -64,7 +64,7 @@ $(document).ready(function() {
 			$('input[name="new_company"]').show();
 		else
 			$('input[name="new_company"]').hide();
-	});
+	});*/
 
 	// calendar tab 
 	/*$('#calendar a.item').click(function(){

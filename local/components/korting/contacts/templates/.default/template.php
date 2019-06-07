@@ -3,7 +3,7 @@
   <div class="feedback">
     <h1>Обратная связь</h1>
   
-    <div><? if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true) die(); ?> <? } else { ?> 
+    <div><? if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true) die(); ?>
       <br />
     <? if(isset($_GET['success'])) { ?> 
       <br />
