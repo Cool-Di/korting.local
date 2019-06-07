@@ -5,7 +5,7 @@
 <head>
 	<title><?=$APPLICATION->ShowTitle()?></title>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-	<script src="/media/js/scripts.js"></script>
+	<script src="/media/js/scripts.js?ver=07062019"></script>
 	<?$APPLICATION->ShowHead();?>
 </head>
 <body>
