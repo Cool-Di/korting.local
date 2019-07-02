@@ -24,8 +24,12 @@ class TransferRequestComponent extends CBitrixComponent
         $this->arResult['BALANCE'] = $userMoney->getBalance();
 
         $this->arResult['MONEY_REQUESTED'] = $_COOKIE['money_requested'] == "Y" ? true : false;
-        //setcookie('money_requested', "N", time() + 1, '/');
-        //debugmessage($GLOBALS["USER"]->GetFullName());
+
+        $dayOfMonth = date('d');
+        //Только с 10 по 20 числа каждого месяца доступна кнопка запроса снятия денег.
+        if($dayOfMonth < 10 || $dayOfMonth > 20) {
+            $this->arResult['FORBIDDEN_DATE'] = true;
+        }
 
         if($_POST && $_POST["MONEY_REQUEST"] == "Y" && !$this->arResult['MONEY_REQUESTED']) {
 

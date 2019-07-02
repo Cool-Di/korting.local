@@ -3,6 +3,8 @@
     Недостаточно средств для отправки запроса
 <?} elseif($arResult['MONEY_REQUESTED']) {?>
     Обработка запроса занимает 1-2 дня, после чего с вами свяжется менеджер
+<?} elseif($arResult['FORBIDDEN_DATE']){?>
+
 <?} else {?>
     <form class="form-horizontal report_form" role="form" method="post" name="report_form" enctype='multipart/form-data'>
         <div class="form-group">
@@ -21,4 +23,7 @@
         </div>
     </form>
 <?}?>
+<div>
+    Запрос на выдачу денег доступен с 10 по 20 число каждого месяца
+</div>
 
